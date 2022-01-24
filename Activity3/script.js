@@ -51,11 +51,10 @@ d3.csv('data/disasters.csv')
   		let cx = mapFromDomainToRange(1, 365, timelineX1, timelineX2, d.daysFromYrStart); //******* don't use 0, use mapFromDomainToRange. Hint- use 365 days and don't worry about leap years... it is ok
 		let cy = getYearPosition(year, gapBetweenTimelines, startOfTimelinesY); //******* don't use 0, use getYearPosition
   		let radius = mapFromDomainToRange(timelineX1, timelineX2, 1, 160, d.daysFromYrStart); //******* don't use 10, use mapFromDomainToRange.  The max cost is 160, and the min cost is 1
-  		console.log(radius);
 		let color = lookupColor(d.category); //******* don't use gray, use lookupColor
 
      	// for each event, draw a circle, along the timeline
-     	drawCircle( cx, cy, radius, color, svg);
+     	drawCircle( cx, cy, Math.abs(radius), color, svg);
 
     });
 
