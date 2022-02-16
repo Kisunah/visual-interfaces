@@ -4,7 +4,7 @@ class NoMeasurementChart {
             parentElement: _config.parentElement,
             containerWidth: _config.containerWidth || 500,
             containerHeight: _config.containerHeight || 140,
-            margin: { top: 10, right: 50, bottom: 30, left: 50 }
+            margin: { top: 50, right: 50, bottom: 30, left: 50 }
         }
 
         this.data = _data;
@@ -20,7 +20,7 @@ class NoMeasurementChart {
 
         vis.xScale = d3.scaleBand()
             .padding(0.1)
-            .range([0, vis.width]);
+            .range([0, vis.width - 100]);
 
         vis.yScale = d3.scaleLinear()
             .range([vis.height, 0])
@@ -35,6 +35,9 @@ class NoMeasurementChart {
             .attr('width', vis.config.containerWidth)
             .attr('height', vis.config.containerHeight);
 
+        // Ensures the old ticks are removed from the x-axis before updating the charts data
+        // vis.svg.selectAll('*').data([]).exit().remove();
+
         vis.chart = vis.svg.append('g')
             .attr('transform', `translate(${vis.config.margin.left},${vis.config.margin.top})`);
 
@@ -45,14 +48,41 @@ class NoMeasurementChart {
         vis.yAxisG = vis.chart.append('g')
             .attr('class', 'axis y-axis');
 
+        // Append a lable for the x-axis
+        vis.chart.append('text')
+            .attr('transform', `translate(${vis.width - 80}, ${vis.height + 10})`)
+            .attr('class', 'axisLabel')
+            .text('Years');
+
+        // Append a label for the y-axis
+        vis.chart.append('text')
+            .attr('transform', `translate(-35, -15)`)
+            .attr('class', 'axisLabel')
+            .text('Number of Days Without a Measurement');
+
         vis.updateVis();
     }
 
     updateVis() {
         let vis = this;
 
-        vis.xScale.domain(vis.data.map(d => d['Year']));
-        vis.yScale.domain([0, 100]);
+        // vis.xScale.domain(vis.data.map(d => d['Year']));
+        let years = [];
+        for (let i = 1980; i < 2021; i++) {
+            years.push(i);
+        }
+        vis.xScale.domain(years);
+        vis.yScale.domain([0, 365]);
+
+        // Function for dividing up the years to be applied to the axis so there aren't too many that are overlapping each other
+        let ticks = [];
+        vis.data.forEach((item, index) => {
+            if (index % 5 == 0) {
+                ticks.push(item.Year);
+            }
+        });
+
+        vis.xAxis.tickValues(ticks);
 
         vis.renderVis();
     }
@@ -62,16 +92,33 @@ class NoMeasurementChart {
 
         const bar = vis.svg.selectAll('rect')
             .data(vis.data)
-            .enter()
-            .append('rect')
-            .attr('fill', 'red')
-            .attr('width', vis.xScale.bandwidth())
-            .attr('height', d => vis.height - vis.yScale(366 - d['Days with AQI']))
-            .attr('x', d => vis.xScale(d['Year']))
+            .join('rect')
+            .attr('x', d => vis.xScale(parseInt(d['Year'])))
             .attr('y', d => vis.yScale(366 - d['Days with AQI']))
-            .attr('transform', `translate(${vis.config.margin.left})`);
+            .attr('transform', `translate(${vis.config.margin.left}, ${vis.config.margin.top})`)
+            .attr('width', vis.xScale.bandwidth())
+            .transition().duration(5000)
+            .attr('fill', (d) => {
+                if (vis.isLeapYear(parseInt(d['Year'])) - d['Days with AQI'] < 100) {
+                    return 'lightblue';
+                } else if (vis.isLeapYear(parseInt(d['Year'])) - d['Days with AQI'] < 200) {
+                    return 'blue';
+                } else if (vis.isLeapYear(parseInt(d['Year'])) - d['Days with AQI'] < 300) {
+                    return '#11143d';
+                } else {
+                    return 'black';
+                }
+            })
+            .attr('height', d => vis.height - vis.yScale(vis.isLeapYear(parseInt(d['Year'])) - d['Days with AQI']))
 
         vis.xAxisG.call(vis.xAxis);
         vis.yAxisG.call(vis.yAxis);
+    }
+
+    isLeapYear(year) {
+        if (year % 400 === 0) return 366;
+        if (year % 100 === 0) return 365;
+        if (year % 4 === 0) return 366;
+        else return 365
     }
 }

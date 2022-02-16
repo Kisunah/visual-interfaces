@@ -30,3 +30,27 @@
     fill: none;
     stroke-width: 2px;
 }
+
+.container {
+    display: flex;
+    flex-direction: row;
+}
+
+.visContainer {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    align-items: center;
+}
+
+.axisLabel {
+    font-size: 125%;
+}
+
+.container1 {
+    border-right: 5px solid black;
+}
+
+.container2 {
+    border-left: 5px solid black;
+}
