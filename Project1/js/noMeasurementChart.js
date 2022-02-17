@@ -72,7 +72,7 @@ class NoMeasurementChart {
             years.push(i);
         }
         vis.xScale.domain(years);
-        vis.yScale.domain([0, 365]);
+        vis.yScale.domain([0, 366]);
 
         // Function for dividing up the years to be applied to the axis so there aren't too many that are overlapping each other
         let ticks = [];
@@ -94,11 +94,8 @@ class NoMeasurementChart {
             .data(vis.data)
             .join('rect')
             .attr('x', d => vis.xScale(parseInt(d['Year'])))
-            .attr('y', vis.yScale(0))
+            .attr('y', d => vis.yScale(vis.isLeapYear(parseInt(d['Year'])) - parseInt(d['Days with AQI'])))
             .attr('transform', `translate(${vis.config.margin.left}, ${vis.config.margin.top})`)
-            .attr('width', vis.xScale.bandwidth())
-            // .attr('height', 0)
-            .transition().duration(2000)
             .attr('fill', (d) => {
                 if (vis.isLeapYear(parseInt(d['Year'])) - d['Days with AQI'] < 100) {
                     return 'lightblue';
@@ -110,8 +107,8 @@ class NoMeasurementChart {
                     return 'black';
                 }
             })
-            .attr('height', d => vis.height - vis.yScale(vis.isLeapYear(parseInt(d['Year'])) - d['Days with AQI']))
-            .attr('y', d => vis.yScale(vis.isLeapYear(parseInt(d['Year'])) - parseInt(d['Days with AQI'])))
+            .attr('width', vis.xScale.bandwidth())
+            .attr('height', d => vis.height - vis.yScale(vis.isLeapYear(parseInt(d['Year'])) - d['Days with AQI']));
         vis.xAxisG.call(vis.xAxis);
         vis.yAxisG.call(vis.yAxis);
     }
@@ -129,7 +126,7 @@ class NoMeasurementChart {
         vis.svg.selectAll('rect')
             .data(newData)
             .transition().duration(2000)
-            .attr('height', d => vis.height - vis.yScale(d.Days))
+            .attr('height', d => vis.height - vis.yScale(vis.isLeapYear(parseInt(d['Year'])) - d['Days with AQI']))
             .attr('y', d => vis.yScale(vis.isLeapYear(parseInt(d['Year'])) - parseInt(d['Days with AQI'])))
     }
 }

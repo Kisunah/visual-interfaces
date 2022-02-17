@@ -4,7 +4,7 @@ class Pollutant {
             parentElement: _config.parentElement,
             containerWidth: _config.containerWidth || 500,
             containerHeight: _config.containerHeight || 140,
-            margin: { top: 10, right: 50, bottom: 30, left: 50 }
+            margin: { top: 50, right: 50, bottom: 30, left: 50 }
         }
 
         this.data = _data;
@@ -20,7 +20,7 @@ class Pollutant {
 
         vis.xScale = d3.scaleBand()
             .padding(0.1)
-            .range([0, vis.width]);
+            .range([0, vis.width - 100]);
 
         vis.yScale = d3.scaleLinear()
             .range([vis.height, 0])
@@ -44,6 +44,16 @@ class Pollutant {
         vis.yAxisG = vis.chart.append('g')
             .attr('class', 'axis y-axis');
 
+        vis.chart.append('text')
+            .attr('transform', `translate(${vis.width - 80}, ${vis.height + 10})`)
+            .attr('class', 'axisLabel')
+            .text('Pollutant')
+
+        vis.chart.append('text')
+            .attr('transform', 'translate(-35, -15)')
+            .attr('class', 'axisLabel')
+            .text('Number of Days');
+
         vis.updateVis();
     }
 
@@ -51,7 +61,7 @@ class Pollutant {
         let vis = this;
 
         vis.xScale.domain(vis.data.map(d => d.Name));
-        vis.yScale.domain([0, 200]);
+        vis.yScale.domain([0, 366]);
 
         vis.renderVis();
     }
@@ -63,11 +73,11 @@ class Pollutant {
             .data(vis.data)
             .join('rect')
             .attr('fill', (d) => {
-                if (d.Days < 50) {
+                if (d.Days < 100) {
                     return 'lightgreen';
-                } else if (d.Days < 100) {
+                } else if (d.Days < 200) {
                     return 'green';
-                } else if (d.Days < 150) {
+                } else if (d.Days < 300) {
                     return 'darkgreen';
                 } else {
                     return 'black';
@@ -77,7 +87,7 @@ class Pollutant {
             .attr('height', d => vis.height - vis.yScale(d.Days))
             .attr('x', d => vis.xScale(d.Name))
             .attr('y', d => vis.yScale(d.Days))
-            .attr('transform', `translate(${vis.config.margin.left})`);
+            .attr('transform', `translate(${vis.config.margin.left}, ${vis.config.margin.top})`);
 
         vis.xAxisG.call(vis.xAxis);
         vis.yAxisG.call(vis.yAxis);
@@ -87,7 +97,7 @@ class Pollutant {
         let vis = this;
 
         if (newData.length == 0) {
-            for(let i = 0; i < 6; i++) {
+            for (let i = 0; i < 6; i++) {
                 newData.push({
                     Days: 0
                 });

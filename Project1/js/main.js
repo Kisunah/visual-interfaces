@@ -115,21 +115,45 @@ d3.csv('data/aqiData.csv')
 
             this.noMeasurement1;
             if (document.getElementById('noMeasurementChart1').children.length == 0) {
-                // while (selectedCounty1Data.length < 42) {
-                //     selectedCounty1Data.forEach((item) => {
+                while (selectedCounty1Data.length < 42) {
+                    selectedCounty1Data.sort((a, b) => {
+                        return a.Year - b.Year
+                    });
 
-                //     });
-                // }
-                yearList = [];
-                selectedCounty1Data.forEach((item) => {
-                    yearList.push(item.Year);
+                    let length = selectedCounty1Data.length;
+                    for (i = 0; i < selectedCounty1Data.length; i++) {
+                        if (parseInt(selectedCounty1Data[i].Year) != 1980 + i) {
+                            selectedCounty1Data.push({
+                                State: state1.value,
+                                County: event.target.value,
+                                Year: `${1980 + i}`,
+                                'Days with AQI': '0'
+                            });
+                            break;
+                        }
+                    }
+
+                    if (selectedCounty1Data.length == length) {
+                        let lastYear = parseInt(selectedCounty1Data[selectedCounty1Data.length - 1].Year);
+                        selectedCounty1Data.push({
+                            State: state1.value,
+                            County: event.target.value,
+                            Year: `${lastYear + 1}`,
+                            'Days with AQI': '0'
+                        })
+                    }
+                }
+
+                selectedCounty1Data.sort((a, b) => {
+                    return a.Year - b.Year
                 });
-                
+
                 this.noMeasurement1 = new NoMeasurementChart({
                     'parentElement': '#noMeasurementChart1',
                     'containerHeight': 500,
                     'containerWidth': 700
                 }, selectedCounty1Data);
+
             } else {
                 this.noMeasurement1.updateChart(selectedCounty1Data);
             }
@@ -153,7 +177,7 @@ d3.csv('data/aqiData.csv')
                     selectedCounty1DescriptionData.push(moderateObject);
 
                     sensitiveObject = {
-                        Name: 'Sensitive Unhealthy',
+                        Name: 'Sensitive',
                         Days: item['Unhealthy for Sensitive Groups Days'],
                         TotalDays: item['Days with AQI']
                     };
@@ -235,6 +259,7 @@ d3.csv('data/aqiData.csv')
                     'containerHeight': 500,
                     'containerWidth': 700
                 }, selectedCounty1PollutantData);
+                window.scrollTo(0, 0);
             } else {
                 this.pollutant1.updateChart(selectedCounty1PollutantData);
             }
@@ -270,9 +295,39 @@ d3.csv('data/aqiData.csv')
 
             this.noMeasurement2;
             if (document.getElementById('noMeasurementChart2').children.length == 0) {
-                if (selectedCounty2Data.length < 42) {
-                    console.log('here');
+                while (selectedCounty2Data.length < 42) {
+                    selectedCounty2Data.sort((a, b) => {
+                        return a.Year - b.Year
+                    });
+
+                    let length = selectedCounty2Data.length;
+                    for (i = 0; i < selectedCounty2Data.length; i++) {
+                        if (parseInt(selectedCounty2Data[i].Year) != 1980 + i) {
+                            selectedCounty2Data.push({
+                                State: state1.value,
+                                County: event.target.value,
+                                Year: `${1980 + i}`,
+                                'Days with AQI': '0'
+                            });
+                            break;
+                        }
+                    }
+
+                    if (selectedCounty2Data.length == length) {
+                        let lastYear = parseInt(selectedCounty2Data[selectedCounty2Data.length - 1].Year);
+                        selectedCounty2Data.push({
+                            State: state1.value,
+                            County: event.target.value,
+                            Year: `${lastYear + 1}`,
+                            'Days with AQI': '0'
+                        })
+                    }
                 }
+
+                selectedCounty2Data.sort((a, b) => {
+                    return a.Year - b.Year
+                });
+
                 this.noMeasurement2 = new NoMeasurementChart({
                     'parentElement': '#noMeasurementChart2',
                     'containerHeight': 500,
@@ -301,7 +356,7 @@ d3.csv('data/aqiData.csv')
                     selectedCounty2DescriptionData.push(moderateObject);
 
                     sensitiveObject = {
-                        Name: 'Sensitive Unhealthy',
+                        Name: 'Sensitive',
                         Days: item['Unhealthy for Sensitive Groups Days'],
                         TotalDays: item['Days with AQI']
                     };
@@ -384,6 +439,7 @@ d3.csv('data/aqiData.csv')
                     'containerHeight': 500,
                     'containerWidth': 700
                 }, selectedCounty2PollutantData);
+                window.scrollTo(0, 0);
             } else {
                 this.pollutant2.updateChart(selectedCounty2PollutantData);
             }

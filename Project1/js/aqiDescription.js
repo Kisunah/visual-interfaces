@@ -4,7 +4,7 @@ class AqiDescription {
             parentElement: _config.parentElement,
             containerWidth: _config.containerWidth || 500,
             containerHeight: _config.containerHeight || 140,
-            margin: { top: 10, right: 50, bottom: 30, left: 50 }
+            margin: { top: 50, right: 50, bottom: 30, left: 50 }
         }
 
         this.data = _data;
@@ -20,7 +20,7 @@ class AqiDescription {
 
         vis.xScale = d3.scaleBand()
             .padding(0.1)
-            .range([0, vis.width]);
+            .range([0, vis.width - 100]);
 
         vis.yScale = d3.scaleLinear()
             .range([vis.height, 0])
@@ -44,6 +44,16 @@ class AqiDescription {
         vis.yAxisG = vis.chart.append('g')
             .attr('class', 'axis y-axis');
 
+        vis.chart.append('text')
+            .attr('transform', `translate(${vis.width - 80}, ${vis.height + 10})`)
+            .attr('class', 'axisLabel')
+            .text('Type of Day')
+
+        vis.chart.append('text')
+            .attr('transform', 'translate(-35, -15)')
+            .attr('class', 'axisLabel')
+            .text('Number of Days');
+
         vis.updateVis();
     }
 
@@ -51,7 +61,7 @@ class AqiDescription {
         let vis = this;
 
         vis.xScale.domain(vis.data.map(d => d.Name));
-        vis.yScale.domain([0, 200]);
+        vis.yScale.domain([0, 366]);
 
         vis.renderVis();
     }
@@ -65,14 +75,14 @@ class AqiDescription {
             .attr('width', vis.xScale.bandwidth())
             .attr('x', d => vis.xScale(d.Name))
             .attr('y', vis.yScale(0))
-            .attr('transform', `translate(${vis.config.margin.left})`)
+            .attr('transform', `translate(${vis.config.margin.left}, ${vis.config.margin.top})`)
             .transition().duration(2000)
             .attr('fill', (d) => {
-                if (d.Days < 50) {
+                if (d.Days < 100) {
                     return 'pink';
-                } else if (d.Days < 100) {
+                } else if (d.Days < 200) {
                     return 'red';
-                } else if (d.Days < 150) {
+                } else if (d.Days < 300) {
                     return 'darkred';
                 } else {
                     return 'black';
@@ -89,7 +99,7 @@ class AqiDescription {
         let vis = this;
 
         if (newData.length == 0) {
-            for(let i = 0; i < 6; i++) {
+            for (let i = 0; i < 6; i++) {
                 newData.push({
                     Days: 0
                 });

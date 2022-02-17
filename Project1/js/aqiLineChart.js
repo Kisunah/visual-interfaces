@@ -125,7 +125,7 @@ class AQILineChart {
             .y(d => vis.yScale(vis.yValueMedian(d)));
 
         vis.xScale.domain(d3.extent(vis.data, vis.xValue));
-        vis.yScale.domain([0, 400]);
+        vis.yScale.domain([0, d3.max(vis.data, d => parseInt(d['Max AQI']))]);
 
         vis.renderVis();
     }
@@ -162,6 +162,9 @@ class AQILineChart {
 
         vis.xScale.domain(d3.extent(newData, vis.xValue));
         vis.xAxisG.call(vis.xAxis);
+
+        vis.yScale.domain([0, d3.max(newData, d => parseInt(d['Max AQI']))]);
+        vis.yAxisG.call(vis.yAxis);
 
         vis.svg.selectAll('.lineMax')
             .transition().duration(2000)
