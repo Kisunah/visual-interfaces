@@ -185,41 +185,72 @@ class PollutantLineChart {
         vis.chart.selectAll('path')
             .data([vis.data])
             .join('path')
-            .attr('class', 'chart-line')
+            .attr('class', 'chart-line co')
             .attr('stroke', 'red')
             .attr('d', vis.lineCO);
 
         vis.chart.append('path')
             .data([vis.data])
-            .attr('class', 'chart-line')
+            .attr('class', 'chart-line no2')
             .attr('stroke', 'blue')
             .attr('d', vis.lineNO2);
 
         vis.chart.append('path')
             .data([vis.data])
-            .attr('class', 'chart-line')
+            .attr('class', 'chart-line ozone')
             .attr('stroke', 'green')
             .attr('d', vis.lineOzone);
 
         vis.chart.append('path')
             .data([vis.data])
-            .attr('class', 'chart-line')
+            .attr('class', 'chart-line so2')
             .attr('stroke', 'purple')
             .attr('d', vis.lineSO2);
 
         vis.chart.append('path')
             .data([vis.data])
-            .attr('class', 'chart-line')
+            .attr('class', 'chart-line pm25')
             .attr('stroke', 'orange')
             .attr('d', vis.linePM25);
 
         vis.chart.append('path')
             .data([vis.data])
-            .attr('class', 'chart-line')
+            .attr('class', 'chart-line pm10')
             .attr('stroke', 'black')
             .attr('d', vis.linePM10);
 
         vis.xAxisG.call(vis.xAxis);
         vis.yAxisG.call(vis.yAxis);
+    }
+
+    updateChart(newData) {
+        let vis = this;
+
+        vis.xScale.domain(d3.extent(newData, vis.xValue));
+        vis.xAxisG.call(vis.xAxis);
+
+        vis.svg.selectAll('.co')
+            .transition().duration(2000)
+            .attr('d', vis.lineCO(newData));
+
+        vis.svg.selectAll('.no2')
+            .transition().duration(2000)
+            .attr('d', vis.lineNO2(newData));
+
+        vis.svg.selectAll('.ozone')
+            .transition().duration(2000)
+            .attr('d', vis.lineOzone(newData));
+
+        vis.svg.selectAll('.so2')
+            .transition().duration(2000)
+            .attr('d', vis.lineSO2(newData));
+
+        vis.svg.selectAll('.pm25')
+            .transition().duration(2000)
+            .attr('d', vis.linePM25(newData));
+
+        vis.svg.selectAll('.pm10')
+            .transition().duration(2000)
+            .attr('d', vis.linePM10(newData));
     }
 }

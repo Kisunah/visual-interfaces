@@ -1,4 +1,4 @@
-class Pollutant2021 {
+class Pollutant {
     constructor(_config, _data) {
         this.config = {
             parentElement: _config.parentElement,
@@ -26,8 +26,7 @@ class Pollutant2021 {
             .range([vis.height, 0])
             .nice();
 
-        vis.xAxis = d3.axisBottom(vis.xScale)
-            .tickFormat(d3.format('d'));
+        vis.xAxis = d3.axisBottom(vis.xScale);
 
         vis.yAxis = d3.axisLeft(vis.yScale);
 
@@ -62,9 +61,18 @@ class Pollutant2021 {
 
         const bar = vis.svg.selectAll('rect')
             .data(vis.data)
-            .enter()
-            .append('rect')
-            .attr('fill', 'red')
+            .join('rect')
+            .attr('fill', (d) => {
+                if (d.Days < 50) {
+                    return 'lightgreen';
+                } else if (d.Days < 100) {
+                    return 'green';
+                } else if (d.Days < 150) {
+                    return 'darkgreen';
+                } else {
+                    return 'black';
+                }
+            })
             .attr('width', vis.xScale.bandwidth())
             .attr('height', d => vis.height - vis.yScale(d.Days))
             .attr('x', d => vis.xScale(d.Name))
@@ -73,5 +81,23 @@ class Pollutant2021 {
 
         vis.xAxisG.call(vis.xAxis);
         vis.yAxisG.call(vis.yAxis);
+    }
+
+    updateChart(newData) {
+        let vis = this;
+
+        if (newData.length == 0) {
+            for(let i = 0; i < 6; i++) {
+                newData.push({
+                    Days: 0
+                });
+            }
+        }
+
+        vis.svg.selectAll('rect')
+            .data(newData)
+            .transition().duration(2000)
+            .attr('height', d => vis.height - vis.yScale(d.Days))
+            .attr('y', d => vis.yScale(d.Days));
     }
 }

@@ -35,8 +35,8 @@ class NoMeasurementChart {
             .attr('width', vis.config.containerWidth)
             .attr('height', vis.config.containerHeight);
 
-        // Ensures the old ticks are removed from the x-axis before updating the charts data
-        // vis.svg.selectAll('*').data([]).exit().remove();
+        // Ensures the old ticks are removed from the x-axis before updating the charts data        
+        vis.svg.selectAll('.axis').data([]).exit().remove();
 
         vis.chart = vis.svg.append('g')
             .attr('transform', `translate(${vis.config.margin.left},${vis.config.margin.top})`);
@@ -94,10 +94,11 @@ class NoMeasurementChart {
             .data(vis.data)
             .join('rect')
             .attr('x', d => vis.xScale(parseInt(d['Year'])))
-            .attr('y', d => vis.yScale(366 - d['Days with AQI']))
+            .attr('y', vis.yScale(0))
             .attr('transform', `translate(${vis.config.margin.left}, ${vis.config.margin.top})`)
             .attr('width', vis.xScale.bandwidth())
-            .transition().duration(5000)
+            // .attr('height', 0)
+            .transition().duration(2000)
             .attr('fill', (d) => {
                 if (vis.isLeapYear(parseInt(d['Year'])) - d['Days with AQI'] < 100) {
                     return 'lightblue';
@@ -110,7 +111,7 @@ class NoMeasurementChart {
                 }
             })
             .attr('height', d => vis.height - vis.yScale(vis.isLeapYear(parseInt(d['Year'])) - d['Days with AQI']))
-
+            .attr('y', d => vis.yScale(vis.isLeapYear(parseInt(d['Year'])) - parseInt(d['Days with AQI'])))
         vis.xAxisG.call(vis.xAxis);
         vis.yAxisG.call(vis.yAxis);
     }
@@ -120,5 +121,15 @@ class NoMeasurementChart {
         if (year % 100 === 0) return 365;
         if (year % 4 === 0) return 366;
         else return 365
+    }
+
+    updateChart(newData) {
+        let vis = this;
+
+        vis.svg.selectAll('rect')
+            .data(newData)
+            .transition().duration(2000)
+            .attr('height', d => vis.height - vis.yScale(d.Days))
+            .attr('y', d => vis.yScale(vis.isLeapYear(parseInt(d['Year'])) - parseInt(d['Days with AQI'])))
     }
 }

@@ -26,8 +26,7 @@ class AqiDescription {
             .range([vis.height, 0])
             .nice();
 
-        vis.xAxis = d3.axisBottom(vis.xScale)
-            .tickFormat(d3.format('d'));
+        vis.xAxis = d3.axisBottom(vis.xScale);
 
         vis.yAxis = d3.axisLeft(vis.yScale);
 
@@ -62,16 +61,45 @@ class AqiDescription {
 
         const bar = vis.svg.selectAll('rect')
             .data(vis.data)
-            .enter()
-            .append('rect')
-            .attr('fill', 'red')
+            .join('rect')
             .attr('width', vis.xScale.bandwidth())
-            .attr('height', d => vis.height - vis.yScale(d.Days))
             .attr('x', d => vis.xScale(d.Name))
-            .attr('y', d => vis.yScale(d.Days))
-            .attr('transform', `translate(${vis.config.margin.left})`);
+            .attr('y', vis.yScale(0))
+            .attr('transform', `translate(${vis.config.margin.left})`)
+            .transition().duration(2000)
+            .attr('fill', (d) => {
+                if (d.Days < 50) {
+                    return 'pink';
+                } else if (d.Days < 100) {
+                    return 'red';
+                } else if (d.Days < 150) {
+                    return 'darkred';
+                } else {
+                    return 'black';
+                }
+            })
+            .attr('height', d => vis.height - vis.yScale(d.Days))
+            .attr('y', d => vis.yScale(d.Days));
 
         vis.xAxisG.call(vis.xAxis);
         vis.yAxisG.call(vis.yAxis);
+    }
+
+    updateChart(newData) {
+        let vis = this;
+
+        if (newData.length == 0) {
+            for(let i = 0; i < 6; i++) {
+                newData.push({
+                    Days: 0
+                });
+            }
+        }
+
+        vis.svg.selectAll('rect')
+            .data(newData)
+            .transition().duration(2000)
+            .attr('height', d => vis.height - vis.yScale(d.Days))
+            .attr('y', d => vis.yScale(d.Days));
     }
 }

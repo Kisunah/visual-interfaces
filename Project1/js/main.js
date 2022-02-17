@@ -4,16 +4,8 @@ d3.csv('data/aqiData.csv')
 
         let data = _data;
 
-        let hamiltonCountyData = [];
-        let orangeCountyData = [];
-        let hamiltonCountyData2021 = [];
         let stateList = [];
         data.forEach((item) => {
-            if (item.State == 'Ohio' && item.County == 'Hamilton') hamiltonCountyData.push(item);
-            if (item.State == 'California' && item.County == 'Orange') orangeCountyData.push(item);
-
-            if (item.State == 'Ohio' && item.County == 'Hamilton' && item.Year == 2021) hamiltonCountyData2021.push(item);
-
             if (stateList.indexOf(item.State) == -1) {
                 stateList.push(item.State);
             }
@@ -99,23 +91,153 @@ d3.csv('data/aqiData.csv')
                 if (item.State == state1.value && item.County == event.target.value) selectedCounty1Data.push(item);
             });
 
-            let aqiLineChart = new AQILineChart({
-                'parentElement': '#aqiChart1',
-                'containerHeight': 500,
-                'containerWidth': 700
-            }, selectedCounty1Data);
+            this.aqiLineChart1
+            if (document.getElementById('aqiChart1').children.length == 0) {
+                this.aqiLineChart1 = new AQILineChart({
+                    'parentElement': '#aqiChart1',
+                    'containerHeight': 500,
+                    'containerWidth': 700
+                }, selectedCounty1Data);
+            } else {
+                this.aqiLineChart1.updateChart(selectedCounty1Data);
+            }
 
-            let pollutantLineChart1 = new PollutantLineChart({
-                'parentElement': '#pollutantChart1',
-                'containerHeight': 500,
-                'containerWidth': 700
-            }, selectedCounty1Data);
+            this.pollutantLineChart1;
+            if (document.getElementById('pollutantChart1').children.length == 0) {
+                this.pollutantLineChart1 = new PollutantLineChart({
+                    'parentElement': '#pollutantChart1',
+                    'containerHeight': 500,
+                    'containerWidth': 700
+                }, selectedCounty1Data);
+            } else {
+                this.pollutantLineChart1.updateChart(selectedCounty1Data);
+            }
 
-            let NoMeasurementChart1 = new NoMeasurementChart({
-                'parentElement': '#noMeasurementChart1',
-                'containerHeight': 500,
-                'containerWidth': 700
-            }, selectedCounty1Data);
+            this.noMeasurement1;
+            if (document.getElementById('noMeasurementChart1').children.length == 0) {
+                // while (selectedCounty1Data.length < 42) {
+                //     selectedCounty1Data.forEach((item) => {
+
+                //     });
+                // }
+                yearList = [];
+                selectedCounty1Data.forEach((item) => {
+                    yearList.push(item.Year);
+                });
+                
+                this.noMeasurement1 = new NoMeasurementChart({
+                    'parentElement': '#noMeasurementChart1',
+                    'containerHeight': 500,
+                    'containerWidth': 700
+                }, selectedCounty1Data);
+            } else {
+                this.noMeasurement1.updateChart(selectedCounty1Data);
+            }
+
+            selectedCounty1DescriptionData = [];
+            selectedCounty1PollutantData = [];
+            selectedCounty1Data.forEach((item) => {
+                if (item['Year'] == 2021) {
+                    goodObject = {
+                        Name: 'Good',
+                        Days: item['Good Days'],
+                        TotalDays: item['Days with AQI']
+                    };
+                    selectedCounty1DescriptionData.push(goodObject);
+
+                    moderateObject = {
+                        Name: 'Moderate',
+                        Days: item['Moderate Days'],
+                        TotalDays: item['Days with AQI']
+                    };
+                    selectedCounty1DescriptionData.push(moderateObject);
+
+                    sensitiveObject = {
+                        Name: 'Sensitive Unhealthy',
+                        Days: item['Unhealthy for Sensitive Groups Days'],
+                        TotalDays: item['Days with AQI']
+                    };
+                    selectedCounty1DescriptionData.push(sensitiveObject);
+
+                    unhealthyObject = {
+                        Name: 'Unhealthy',
+                        Days: item['Unhealthy Days'],
+                        TotalDays: item['Days with AQI']
+                    };
+                    selectedCounty1DescriptionData.push(unhealthyObject);
+
+                    veryUnhealthyObject = {
+                        Name: 'Very Unhealthy',
+                        Days: item['Very Unhealthy Days'],
+                        TotalDays: item['Days with AQI']
+                    };
+                    selectedCounty1DescriptionData.push(veryUnhealthyObject);
+
+                    hazardousObject = {
+                        Name: 'Hazardous',
+                        Days: item['Hazardous Days'],
+                        TotalDays: item['Days with AQI']
+                    };
+                    selectedCounty1DescriptionData.push(hazardousObject);
+
+                    COObject = {
+                        Name: 'CO',
+                        Days: item['Days CO']
+                    };
+                    selectedCounty1PollutantData.push(COObject);
+
+                    NO2Object = {
+                        Name: 'NO2',
+                        Days: item['Days NO2']
+                    };
+                    selectedCounty1PollutantData.push(NO2Object);
+
+                    OzoneObject = {
+                        Name: 'Ozone',
+                        Days: item['Days Ozone']
+                    };
+                    selectedCounty1PollutantData.push(OzoneObject);
+
+                    SO2Object = {
+                        Name: 'SO2',
+                        Days: item['Days SO2']
+                    };
+                    selectedCounty1PollutantData.push(SO2Object);
+
+                    PM25Object = {
+                        Name: 'PM2.5',
+                        Days: item['Days PM2.5']
+                    };
+                    selectedCounty1PollutantData.push(PM25Object);
+
+                    PM10Object = {
+                        Name: 'PM10',
+                        Days: item['Days PM10']
+                    };
+                    selectedCounty1PollutantData.push(PM10Object);
+                }
+            });
+            this.aqiDescription1;
+            if (document.getElementById('aqiDescription1').children.length == 0) {
+                this.aqiDescription1 = new AqiDescription({
+                    'parentElement': '#aqiDescription1',
+                    'containerHeight': 500,
+                    'containerWidth': 700
+                }, selectedCounty1DescriptionData);
+            } else {
+                this.aqiDescription1.updateChart(selectedCounty1DescriptionData);
+            }
+
+            this.pollutant1;
+            if (document.getElementById('pollutant1').children.length == 0) {
+                this.pollutant1 = new Pollutant({
+                    'parentElement': '#pollutant1',
+                    'containerHeight': 500,
+                    'containerWidth': 700
+                }, selectedCounty1PollutantData);
+            } else {
+                this.pollutant1.updateChart(selectedCounty1PollutantData);
+            }
         });
 
         county2.addEventListener('change', (event) => {
@@ -124,168 +246,148 @@ d3.csv('data/aqiData.csv')
                 if (item.State == state2.value && item.County == event.target.value) selectedCounty2Data.push(item);
             });
 
-            let aqiLineChart2 = new AQILineChart({
-                'parentElement': '#aqiChart2',
-                'containerHeight': 500,
-                'containerWidth': 700
-            }, selectedCounty2Data);
+            this.aqiLineChart2;
+            if (document.getElementById('aqiChart2').children.length == 0) {
+                this.aqiLineChart2 = new AQILineChart({
+                    'parentElement': '#aqiChart2',
+                    'containerHeight': 500,
+                    'containerWidth': 700
+                }, selectedCounty2Data);
+            } else {
+                this.aqiLineChart2.updateChart(selectedCounty2Data);
+            }
 
-            let pollutantLineChart2 = new PollutantLineChart({
-                'parentElement': '#pollutantChart2',
-                'containerHeight': 500,
-                'containerWidth': 700
-            }, selectedCounty2Data);
+            this.pollutantLineChart2;
+            if (document.getElementById('pollutantChart2').children.length == 0) {
+                this.pollutantLineChart2 = new PollutantLineChart({
+                    'parentElement': '#pollutantChart2',
+                    'containerHeight': 500,
+                    'containerWidth': 700
+                }, selectedCounty2Data);
+            } else {
+                this.pollutantLineChart2.updateChart(selectedCounty2Data);
+            }
 
-            let NoMeasurementChart2 = new NoMeasurementChart({
-                'parentElement': '#noMeasurementChart2',
-                'containerHeight': 500,
-                'containerWidth': 700
-            }, selectedCounty2Data);
+            this.noMeasurement2;
+            if (document.getElementById('noMeasurementChart2').children.length == 0) {
+                if (selectedCounty2Data.length < 42) {
+                    console.log('here');
+                }
+                this.noMeasurement2 = new NoMeasurementChart({
+                    'parentElement': '#noMeasurementChart2',
+                    'containerHeight': 500,
+                    'containerWidth': 700
+                }, selectedCounty2Data);
+            } else {
+                this.noMeasurement2.updateChart(selectedCounty2Data)
+            }
 
-        });
+            selectedCounty2DescriptionData = [];
+            selectedCounty2PollutantData = [];
+            selectedCounty2Data.forEach((item) => {
+                if (item['Year'] == 2021) {
+                    goodObject = {
+                        Name: 'Good',
+                        Days: item['Good Days'],
+                        TotalDays: item['Days with AQI']
+                    };
+                    selectedCounty2DescriptionData.push(goodObject);
 
-        let aqiLineChart1 = new AQILineChart({
-            'parentElement': '#aqiChart1',
-            'containerHeight': 500,
-            'containerWidth': 700
-        }, []);
+                    moderateObject = {
+                        Name: 'Moderate',
+                        Days: item['Moderate Days'],
+                        TotalDays: item['Days with AQI']
+                    };
+                    selectedCounty2DescriptionData.push(moderateObject);
 
-        let pollutantLineChart1 = new PollutantLineChart({
-            'parentElement': '#pollutantChart1',
-            'containerHeight': 500,
-            'containerWidth': 700
-        }, []);
+                    sensitiveObject = {
+                        Name: 'Sensitive Unhealthy',
+                        Days: item['Unhealthy for Sensitive Groups Days'],
+                        TotalDays: item['Days with AQI']
+                    };
+                    selectedCounty2DescriptionData.push(sensitiveObject);
 
-        let noMeasurement1 = new NoMeasurementChart({
-            'parentElement': '#noMeasurementChart1',
-            'containerHeight': 500,
-            'containerWidth': 700
-        }, []);
+                    unhealthyObject = {
+                        Name: 'Unhealthy',
+                        Days: item['Unhealthy Days'],
+                        TotalDays: item['Days with AQI']
+                    };
+                    selectedCounty2DescriptionData.push(unhealthyObject);
 
-        let aqiLineChart2 = new AQILineChart({
-            'parentElement': '#aqiChart2',
-            'containerHeight': 500,
-            'containerWidth': 700
-        }, []);
+                    veryUnhealthyObject = {
+                        Name: 'Very Unhealthy',
+                        Days: item['Very Unhealthy Days'],
+                        TotalDays: item['Days with AQI']
+                    };
+                    selectedCounty2DescriptionData.push(veryUnhealthyObject);
 
-        let pollutantLineChart2 = new PollutantLineChart({
-            'parentElement': '#pollutantChart2',
-            'containerHeight': 500,
-            'containerWidth': 700
-        }, []);
+                    hazardousObject = {
+                        Name: 'Hazardous',
+                        Days: item['Hazardous Days'],
+                        TotalDays: item['Days with AQI']
+                    };
+                    selectedCounty2DescriptionData.push(hazardousObject);
 
-        let noMeasurement2 = new NoMeasurementChart({
-            'parentElement': '#noMeasurementChart2',
-            'containerHeight': 500,
-            'containerWidth': 700
-        }, []);
+                    COObject = {
+                        Name: 'CO',
+                        Days: item['Days CO']
+                    };
+                    selectedCounty2PollutantData.push(COObject);
 
-        let hamiltonCountyDataDescription = [];
-        hamiltonCountyData.forEach((item) => {
-            if (item['Year'] == 2021) {
-                goodObject = {
-                    Name: 'Good Days',
-                    Days: item['Good Days'],
-                    TotalDays: item['Days with AQI']
-                };
-                hamiltonCountyDataDescription.push(goodObject);
+                    NO2Object = {
+                        Name: 'NO2',
+                        Days: item['Days NO2']
+                    };
+                    selectedCounty2PollutantData.push(NO2Object);
 
-                moderateObject = {
-                    Name: 'Moderate Days',
-                    Days: item['Moderate Days'],
-                    TotalDays: item['Days with AQI']
-                };
-                hamiltonCountyDataDescription.push(moderateObject);
+                    OzoneObject = {
+                        Name: 'Ozone',
+                        Days: item['Days Ozone']
+                    };
+                    selectedCounty2PollutantData.push(OzoneObject);
 
-                sensitiveObject = {
-                    Name: 'Unhealthy for Sensitive Groups Days',
-                    Days: item['Unhealthy for Sensitive Groups Days'],
-                    TotalDays: item['Days with AQI']
-                };
-                hamiltonCountyDataDescription.push(sensitiveObject);
+                    SO2Object = {
+                        Name: 'SO2',
+                        Days: item['Days SO2']
+                    };
+                    selectedCounty2PollutantData.push(SO2Object);
 
-                unhealthyObject = {
-                    Name: 'Unhealthy Days',
-                    Days: item['Unhealthy Days'],
-                    TotalDays: item['Days with AQI']
-                };
-                hamiltonCountyDataDescription.push(unhealthyObject);
+                    PM25Object = {
+                        Name: 'PM2.5',
+                        Days: item['Days PM2.5']
+                    };
+                    selectedCounty2PollutantData.push(PM25Object);
 
-                veryUnhealthyObject = {
-                    Name: 'Very Unhealthy Days',
-                    Days: item['Very Unhealthy Days'],
-                    TotalDays: item['Days with AQI']
-                };
-                hamiltonCountyDataDescription.push(veryUnhealthyObject);
+                    PM10Object = {
+                        Name: 'PM10',
+                        Days: item['Days PM10']
+                    };
+                    selectedCounty2PollutantData.push(PM10Object);
+                }
+            });
 
-                hazardousObject = {
-                    Name: 'Hazardous Days',
-                    Days: item['Hazardous Days'],
-                    TotalDays: item['Days with AQI']
-                };
-                hamiltonCountyDataDescription.push(hazardousObject);
+            this.aqiDescription2;
+            if (document.getElementById('aqiDescription2').children.length == 0) {
+                this.aqiDescription2 = new AqiDescription({
+                    'parentElement': '#aqiDescription2',
+                    'containerHeight': 500,
+                    'containerWidth': 700
+                }, selectedCounty2DescriptionData);
+            } else {
+                this.aqiDescription2.updateChart(selectedCounty2DescriptionData);
+            }
 
-                COObject = {
-                    Name: 'CO',
-                    Days: item['Days CO']
-                };
-                hamiltonCountyData2021.push(COObject);
-
-                NO2Object = {
-                    Name: 'NO2',
-                    Days: item['Days NO2']
-                };
-                hamiltonCountyData2021.push(NO2Object);
-
-                OzoneObject = {
-                    Name: 'Ozone',
-                    Days: item['Days Ozone']
-                };
-                hamiltonCountyData2021.push(OzoneObject);
-
-                SO2Object = {
-                    Name: 'SO2',
-                    Days: item['Days SO2']
-                };
-                hamiltonCountyData2021.push(SO2Object);
-
-                PM25Object = {
-                    Name: 'PM2.5',
-                    Days: item['Days PM2.5']
-                };
-                hamiltonCountyData2021.push(PM25Object);
-
-                PM10Object = {
-                    Name: 'PM10',
-                    Days: item['Days PM10']
-                };
-                hamiltonCountyData2021.push(PM10Object);
+            this.pollutant2;
+            if (document.getElementById('pollutant2').children.length == 0) {
+                this.pollutant2 = new Pollutant({
+                    'parentElement': '#pollutant2',
+                    'containerHeight': 500,
+                    'containerWidth': 700
+                }, selectedCounty2PollutantData);
+            } else {
+                this.pollutant2.updateChart(selectedCounty2PollutantData);
             }
         });
-
-        let aqiDescription1 = new AqiDescription({
-            'parentElement': '#aqiDescription1',
-            'containerHeight': 500,
-            'containerWidth': 700
-        }, hamiltonCountyDataDescription);
-
-        let pollutant20211 = new Pollutant2021({
-            'parentElement': '#pollutant20211',
-            'containerHeight': 500,
-            'containerWidth': 700
-        }, hamiltonCountyData2021);
-
-        let aqiDescription = new AqiDescription({
-            'parentElement': '#aqiDescription2',
-            'containerHeight': 500,
-            'containerWidth': 700
-        }, hamiltonCountyDataDescription);
-
-        let pollutant2021 = new Pollutant2021({
-            'parentElement': '#pollutant20212',
-            'containerHeight': 500,
-            'containerWidth': 700
-        }, hamiltonCountyData2021);
     })
     .catch(err => {
         console.error('Error loading the data');

@@ -137,25 +137,42 @@ class AQILineChart {
         vis.chart.selectAll('path')
             .data([vis.data])
             .join('path')
-            .attr('class', 'chart-line')
+            .attr('class', 'chart-line lineMax')
             .attr('stroke', 'red')
-            .transition()
             .attr('d', vis.lineMax);
 
         vis.chart.append('path')
             .data([vis.data])
-            .attr('class', 'chart-line')
+            .attr('class', 'chart-line line90')
             .attr('stroke', 'blue')
-            .transition()
             .attr('d', vis.line90);
 
         vis.chart.append('path')
             .data([vis.data])
-            .attr('class', 'chart-line')
+            .attr('class', 'chart-line lineMedian')
             .attr('stroke', 'green')
             .attr('d', vis.lineMedian);
 
         vis.xAxisG.call(vis.xAxis);
         vis.yAxisG.call(vis.yAxis);
+    }
+
+    updateChart(newData) {
+        let vis = this;
+
+        vis.xScale.domain(d3.extent(newData, vis.xValue));
+        vis.xAxisG.call(vis.xAxis);
+
+        vis.svg.selectAll('.lineMax')
+            .transition().duration(2000)
+            .attr('d', vis.lineMax(newData));
+
+        vis.svg.selectAll('.line90')
+            .transition().duration(2000)
+            .attr('d', vis.line90(newData));
+
+        vis.svg.selectAll('.lineMedian')
+            .transition().duration(2000)
+            .attr('d', vis.lineMedian(newData));
     }
 }
