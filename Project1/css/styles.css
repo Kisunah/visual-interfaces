@@ -109,3 +109,7 @@ body {
     margin: 0;
     font-size: 125%;
 }
+
+.tooltipText {
+    font-weight: bold;
+}

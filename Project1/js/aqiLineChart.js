@@ -63,7 +63,7 @@ class AQILineChart {
         // Append rectangles and text respective to their lines as a legend for the chart
         vis.legend = vis.chart.append('g')
             .attr('class', 'lineLegend')
-            .attr('transform', `translate(${vis.width-50},${50})`);
+            .attr('transform', `translate(${vis.width - 50},${50})`);
 
         vis.legend.append('rect')
             .attr('width', 10)
@@ -98,13 +98,17 @@ class AQILineChart {
             .attr('x', 15)
             .text('Median AQI');
 
+        vis.trackingArea = vis.chart.append('rect')
+            .attr('width', vis.width)
+            .attr('height', vis.height)
+            .attr('fill', 'none')
+            .attr('pointer-events', 'all');
+
         vis.updateVis();
     }
 
     updateVis() {
         let vis = this;
-
-        // vis.svg.selectAll('path').data([]).exit().remove();
 
         vis.xValue = d => d['Year'];
         vis.yValueMax = d => d['Max AQI'];
@@ -126,6 +130,8 @@ class AQILineChart {
 
         vis.xScale.domain(d3.extent(vis.data, vis.xValue));
         vis.yScale.domain([0, d3.max(vis.data, d => parseInt(d['Max AQI']))]);
+
+        vis.bisectDate = d3.bisector(vis.xValue).left;
 
         vis.renderVis();
     }
@@ -155,6 +161,73 @@ class AQILineChart {
 
         vis.xAxisG.call(vis.xAxis);
         vis.yAxisG.call(vis.yAxis);
+
+        vis.tooltip = vis.chart.append('g')
+            .attr('class', 'tooltip')
+            .style('display', 'none');
+
+        vis.tooltip.append('circle')
+            .attr('id', 'circle1')
+            .attr('r', 4);
+
+        vis.tooltip.append('circle')
+            .attr('id', 'circle2')
+            .attr('r', 4);
+
+        vis.tooltip.append('circle')
+            .attr('id', 'circle3')
+            .attr('r', 4);
+
+        vis.tooltip.append('text')
+            .attr('class', 'tooltipText')
+            .attr('id', 'text1');
+
+        vis.tooltip.append('text')
+            .attr('class', 'tooltipText')
+            .attr('id', 'text2');
+
+        vis.tooltip.append('text')
+            .attr('class', 'tooltipText')
+            .attr('id', 'text3');
+
+        vis.trackingArea
+            .on('mouseenter', () => {
+                vis.tooltip.style('display', 'block');
+            })
+            .on('mouseleave', () => {
+                vis.tooltip.style('display', 'none');
+            })
+            .on('mousemove', (event) => {
+                const xPos = d3.pointer(event, this)[0];
+                const date = vis.xScale.invert(xPos) - 40;
+
+                const index = vis.bisectDate(vis.data, date, 1);
+                const a = vis.data[index - 1];
+                const b = vis.data[index];
+                const d = b && (date - a.date > b.date - date) ? b : a;
+
+                // Update tooltip
+                vis.tooltip.select('#circle1')
+                    .attr('transform', `translate(${vis.xScale(parseInt(d.Year))},${vis.yScale(parseInt(d['Max AQI']))})`);
+
+                vis.tooltip.select('#circle2')
+                    .attr('transform', `translate(${vis.xScale(parseInt(d.Year))},${vis.yScale(parseInt(d['90th Percentile AQI']))})`);
+
+                vis.tooltip.select('#circle3')
+                    .attr('transform', `translate(${vis.xScale(parseInt(d.Year))},${vis.yScale(parseInt(d['Median AQI']))})`);
+
+                vis.tooltip.select('#text1')
+                    .attr('transform', `translate(${vis.xScale(parseInt(d.Year))},${(vis.yScale(parseInt(d['Max AQI'])) - 5)})`)
+                    .text(`${d.Year}: ${d['Max AQI']}`);
+
+                vis.tooltip.select('#text2')
+                    .attr('transform', `translate(${vis.xScale(parseInt(d.Year))},${(vis.yScale(parseInt(d['90th Percentile AQI'])) - 25)})`)
+                    .text(`${d.Year}: ${d['90th Percentile AQI']}`);
+
+                vis.tooltip.select('#text3')
+                    .attr('transform', `translate(${vis.xScale(parseInt(d.Year))},${(vis.yScale(parseInt(d['Median AQI'])) - 25)})`)
+                    .text(`${d.Year}: ${d['Median AQI']}`);
+            });
     }
 
     updateChart(newData) {
