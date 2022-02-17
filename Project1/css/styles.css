@@ -54,7 +54,7 @@ body {
 }
 
 .container {
-    margin-top: 125px;
+    margin-top: 225px;
 }
 
 .container1 {
@@ -74,7 +74,7 @@ body {
     z-index: 1;
     background-color: white;
     display: flex;
-    justify-content: space-around;
+    flex-direction: column;
 }
 
 .selectContainer {
@@ -84,4 +84,28 @@ body {
 
 .select {
     width: 180px;
+}
+
+.containerContainer {
+    display: flex;
+    justify-content: space-around;
+}
+
+.header {
+    text-align: center;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 350%;
+}
+
+.header h2 {
+    font-size: 200%;
+    margin: 0;
+}
+
+.header p {
+    margin: 0;
+    font-size: 125%;
 }
