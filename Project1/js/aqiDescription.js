@@ -145,6 +145,34 @@ class AqiDescription {
 
         vis.svg.selectAll('rect')
             .data(newData)
+            .on('mouseover', (event) => {
+                vis.tooltip.style('display', 'block');
+
+                let xPos = d3.pointer(event, this)[0];
+
+                let eachBand = vis.xScale.step();
+                let index;
+                if (event.target.parentElement.id == 'aqiDescription1') {
+                    index = Math.floor((xPos / eachBand)) - 6;
+                } else {
+                    index = Math.floor((xPos / eachBand)) - 18;
+                }
+                let val = vis.xScale.domain()[index];
+
+                let dataItem;
+                newData.forEach((item) => {
+                    if (item.Name == val) {
+                        dataItem = item;
+                    }
+                });
+
+                vis.tooltip.select('#descriptionTooltip')
+                    .attr('transform', `translate(${vis.xScale(val)}, ${vis.yScale(dataItem.Days) - 5})`)
+                    .text(`${dataItem.Days} Days`);
+            })
+            .on('mouseleave', () => {
+                vis.tooltip.style('display', 'none');
+            })
             .transition().duration(2000)
             .attr('height', d => vis.height - vis.yScale(d.Days))
             .attr('y', d => vis.yScale(d.Days))

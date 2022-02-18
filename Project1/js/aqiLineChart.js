@@ -275,7 +275,7 @@ class AQILineChart {
             .transition().duration(2000)
             .attr('d', vis.lineMedian(newData));
 
-            vis.trackingArea
+        vis.trackingArea
             .on('mouseenter', () => {
                 vis.tooltip.style('display', 'block');
             })
