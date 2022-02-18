@@ -54,7 +54,7 @@ body {
 }
 
 .container {
-    margin-top: 225px;
+    margin-top: 275px;
 }
 
 .container1 {
@@ -75,6 +75,10 @@ body {
     background-color: white;
     display: flex;
     flex-direction: column;
+}
+
+.fixedContainer p {
+    margin: 0;
 }
 
 .selectContainer {
@@ -106,10 +110,13 @@ body {
 }
 
 .header p {
-    margin: 0;
     font-size: 125%;
 }
 
 .tooltipText {
     font-weight: bold;
+}
+
+.trackingArea:hover {
+    cursor: pointer;
 }

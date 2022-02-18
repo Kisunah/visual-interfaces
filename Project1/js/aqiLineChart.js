@@ -102,6 +102,7 @@ class AQILineChart {
             .attr('width', vis.width)
             .attr('height', vis.height)
             .attr('fill', 'none')
+            .attr('class', 'trackingArea')
             .attr('pointer-events', 'all');
 
         vis.updateVis();
@@ -199,7 +200,12 @@ class AQILineChart {
             })
             .on('mousemove', (event) => {
                 const xPos = d3.pointer(event, this)[0];
-                const date = vis.xScale.invert(xPos) - 40;
+                let date;
+                if (event.target.parentElement.parentElement.id == 'aqiChart1') {
+                    date = vis.xScale.invert(xPos) - 40;
+                } else {
+                    date = vis.xScale.invert(xPos) - 120;
+                }
 
                 const index = vis.bisectDate(vis.data, date, 1);
                 const a = vis.data[index - 1];
@@ -227,6 +233,30 @@ class AQILineChart {
                 vis.tooltip.select('#text3')
                     .attr('transform', `translate(${vis.xScale(parseInt(d.Year))},${(vis.yScale(parseInt(d['Median AQI'])) - 25)})`)
                     .text(`${d.Year}: ${d['Median AQI']}`);
+            })
+            .on('click', (event) => {
+                const xPos = d3.pointer(event, this)[0];
+                let date;
+                if (event.target.parentElement.parentElement.id == 'aqiChart1') {
+                    date = vis.xScale.invert(xPos) - 40;
+                } else {
+                    date = vis.xScale.invert(xPos) - 120;
+                }
+
+                const index = vis.bisectDate(vis.data, date, 1);
+                const a = vis.data[index - 1];
+                const b = vis.data[index];
+                const d = b && (date - a.date > b.date - date) ? b : a;
+
+                if (event.target.parentElement.parentElement.id == 'aqiChart1') {
+                    let year1 = document.getElementById('year1');
+                    year1.value = d.Year;
+                    year1.dispatchEvent(new Event('change'));
+                } else {
+                    let year2 = document.getElementById('year2');
+                    year2.value = d.Year;
+                    year2.dispatchEvent(new Event('change'));
+                }
             });
     }
 
