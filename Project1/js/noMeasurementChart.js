@@ -68,7 +68,7 @@ class NoMeasurementChart {
 
         // vis.xScale.domain(vis.data.map(d => d['Year']));
         let years = [];
-        for (let i = 1980; i < 2021; i++) {
+        for (let i = 1980; i < 2022; i++) {
             years.push(i);
         }
         vis.xScale.domain(years);
