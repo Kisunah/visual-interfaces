@@ -64,6 +64,7 @@ d3.csv('data/aqiData.csv')
 
         selectedState1CountyList = [];
         state1.addEventListener('change', (event) => {
+            year.setAttribute('disabled', 'true');
             county1.innerHTML = '<option value=""></option>';
             countyList.forEach((item) => {
                 if (item.State == event.target.value) {
@@ -83,6 +84,7 @@ d3.csv('data/aqiData.csv')
 
         selectedState2CountyList = [];
         state2.addEventListener('change', (event) => {
+            year.setAttribute('disabled', 'true');
             county2.innerHTML = '<option value=""></option>';
             countyList.forEach((item) => {
                 if (item.State == event.target.value) {
@@ -99,8 +101,13 @@ d3.csv('data/aqiData.csv')
             });
         });
 
-        this.selectedCounty1Data;
+        this.selectedCounty1Data = [];
         county1.addEventListener('change', (event) => {
+            if (county1.value != '' && county2.value != '') {
+                year.removeAttribute('disabled');
+            } else {
+                year.setAttribute('disabled', 'true');
+            }
             let selectedCounty1Data = [];
             data.forEach((item) => {
                 if (item.State == state1.value && item.County == event.target.value) selectedCounty1Data.push(item);
@@ -174,8 +181,8 @@ d3.csv('data/aqiData.csv')
             }
 
             this.selectedCounty1Data = selectedCounty1Data;
-            selectedCounty1DescriptionData = [];
-            selectedCounty1PollutantData = [];
+            let selectedCounty1DescriptionData = [];
+            let selectedCounty1PollutantData = [];
             selectedCounty1Data.forEach((item) => {
                 if (item['Year'] == 2021) {
                     goodObject = {
@@ -257,6 +264,19 @@ d3.csv('data/aqiData.csv')
                     selectedCounty1PollutantData.push(PM10Object);
                 }
             });
+
+            selectedCounty1DescriptionData.forEach((item) => {
+                if (item.Days == undefined) {
+                    item.Days = `${0}`;
+                }
+            });
+
+            selectedCounty1PollutantData.forEach((item) => {
+                if (item.Days == undefined) {
+                    item.Days = `${0}`;
+                }
+            });
+            
             this.aqiDescription1;
             if (document.getElementById('aqiDescription1').children.length == 0) {
                 this.aqiDescription1 = new AqiDescription({
@@ -281,8 +301,13 @@ d3.csv('data/aqiData.csv')
             }
         });
 
-        this.selectedCounty2Data;
+        this.selectedCounty2Data = [];
         county2.addEventListener('change', (event) => {
+            if (county1.value != '' && county2.value != '') {
+                year.removeAttribute('disabled');
+            } else {
+                year.setAttribute('disabled', 'true');
+            }
             let selectedCounty2Data = [];
             data.forEach((item) => {
                 if (item.State == state2.value && item.County == event.target.value) selectedCounty2Data.push(item);
@@ -436,6 +461,18 @@ d3.csv('data/aqiData.csv')
                         Days: item['Days PM10']
                     };
                     selectedCounty2PollutantData.push(PM10Object);
+                }
+            });
+
+            selectedCounty2DescriptionData.forEach((item) => {
+                if (item.Days == undefined) {
+                    item.Days = `${0}`;
+                }
+            });
+
+            selectedCounty2PollutantData.forEach((item) => {
+                if (item.Days == undefined) {
+                    item.Days = `${0}`;
                 }
             });
 

@@ -274,5 +274,67 @@ class AQILineChart {
         vis.svg.selectAll('.lineMedian')
             .transition().duration(2000)
             .attr('d', vis.lineMedian(newData));
+
+            vis.trackingArea
+            .on('mouseenter', () => {
+                vis.tooltip.style('display', 'block');
+            })
+            .on('mouseleave', () => {
+                vis.tooltip.style('display', 'none');
+            })
+            .on('mousemove', (event) => {
+                const xPos = d3.pointer(event, this)[0];
+                let date;
+                if (event.target.parentElement.parentElement.id == 'aqiChart1') {
+                    date = vis.xScale.invert(xPos) - 40;
+                } else {
+                    date = vis.xScale.invert(xPos) - 120;
+                }
+
+                const index = vis.bisectDate(newData, date, 1);
+                const a = newData[index - 1];
+                const b = newData[index];
+                const d = b && (date - a.date > b.date - date) ? b : a;
+
+                // Update tooltip
+                vis.tooltip.select('#circle1')
+                    .attr('transform', `translate(${vis.xScale(parseInt(d.Year))},${vis.yScale(parseInt(d['Max AQI']))})`);
+
+                vis.tooltip.select('#circle2')
+                    .attr('transform', `translate(${vis.xScale(parseInt(d.Year))},${vis.yScale(parseInt(d['90th Percentile AQI']))})`);
+
+                vis.tooltip.select('#circle3')
+                    .attr('transform', `translate(${vis.xScale(parseInt(d.Year))},${vis.yScale(parseInt(d['Median AQI']))})`);
+
+                vis.tooltip.select('#text1')
+                    .attr('transform', `translate(${vis.xScale(parseInt(d.Year))},${(vis.yScale(parseInt(d['Max AQI'])) - 5)})`)
+                    .text(`${d.Year}: ${d['Max AQI']}`);
+
+                vis.tooltip.select('#text2')
+                    .attr('transform', `translate(${vis.xScale(parseInt(d.Year))},${(vis.yScale(parseInt(d['90th Percentile AQI'])) - 25)})`)
+                    .text(`${d.Year}: ${d['90th Percentile AQI']}`);
+
+                vis.tooltip.select('#text3')
+                    .attr('transform', `translate(${vis.xScale(parseInt(d.Year))},${(vis.yScale(parseInt(d['Median AQI'])) - 25)})`)
+                    .text(`${d.Year}: ${d['Median AQI']}`);
+            })
+            .on('click', (event) => {
+                const xPos = d3.pointer(event, this)[0];
+                let date;
+                if (event.target.parentElement.parentElement.id == 'aqiChart1') {
+                    date = vis.xScale.invert(xPos) - 40;
+                } else {
+                    date = vis.xScale.invert(xPos) - 120;
+                }
+
+                const index = vis.bisectDate(newData, date, 1);
+                const a = newData[index - 1];
+                const b = newData[index];
+                const d = b && (date - a.date > b.date - date) ? b : a;
+
+                let year = document.getElementById('year');
+                year.value = d.Year;
+                year.dispatchEvent(new Event('change'));
+            });
     }
 }
