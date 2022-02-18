@@ -99,7 +99,7 @@ class AQILineChart {
             .text('Median AQI');
 
         vis.trackingArea = vis.chart.append('rect')
-            .attr('width', vis.width)
+            .attr('width', vis.width - 90)
             .attr('height', vis.height)
             .attr('fill', 'none')
             .attr('class', 'trackingArea')
@@ -223,15 +223,15 @@ class AQILineChart {
                     .attr('transform', `translate(${vis.xScale(parseInt(d.Year))},${vis.yScale(parseInt(d['Median AQI']))})`);
 
                 vis.tooltip.select('#text1')
-                    .attr('transform', `translate(${vis.xScale(parseInt(d.Year))},${(vis.yScale(parseInt(d['Max AQI'])) - 5)})`)
+                    .attr('transform', `translate(${vis.xScale(parseInt(d.Year))},${(vis.yScale(parseInt(d['Max AQI'])) - 20)})`)
                     .text(`${d.Year}: ${d['Max AQI']}`);
 
                 vis.tooltip.select('#text2')
-                    .attr('transform', `translate(${vis.xScale(parseInt(d.Year))},${(vis.yScale(parseInt(d['90th Percentile AQI'])) - 25)})`)
+                    .attr('transform', `translate(${vis.xScale(parseInt(d.Year))},${(vis.yScale(parseInt(d['90th Percentile AQI'])) - 20)})`)
                     .text(`${d.Year}: ${d['90th Percentile AQI']}`);
 
                 vis.tooltip.select('#text3')
-                    .attr('transform', `translate(${vis.xScale(parseInt(d.Year))},${(vis.yScale(parseInt(d['Median AQI'])) - 25)})`)
+                    .attr('transform', `translate(${vis.xScale(parseInt(d.Year))},${(vis.yScale(parseInt(d['Median AQI'])) - 20)})`)
                     .text(`${d.Year}: ${d['Median AQI']}`);
             })
             .on('click', (event) => {
