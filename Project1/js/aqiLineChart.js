@@ -248,15 +248,9 @@ class AQILineChart {
                 const b = vis.data[index];
                 const d = b && (date - a.date > b.date - date) ? b : a;
 
-                if (event.target.parentElement.parentElement.id == 'aqiChart1') {
-                    let year1 = document.getElementById('year1');
-                    year1.value = d.Year;
-                    year1.dispatchEvent(new Event('change'));
-                } else {
-                    let year2 = document.getElementById('year2');
-                    year2.value = d.Year;
-                    year2.dispatchEvent(new Event('change'));
-                }
+                let year = document.getElementById('year');
+                year.value = d.Year;
+                year.dispatchEvent(new Event('change'));
             });
     }
 

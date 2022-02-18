@@ -49,8 +49,7 @@ d3.csv('data/aqiData.csv')
         });
 
         // Populate the year select elements
-        let year1 = document.getElementById('year1');
-        let year2 = document.getElementById('year2');
+        let year = document.getElementById('year');
         for (let i = 2021; i > 1980; i--) {
             let option1 = document.createElement('option');
             option1.value = i;
@@ -60,8 +59,7 @@ d3.csv('data/aqiData.csv')
             option2.value = i;
             option2.innerHTML = i;
 
-            year1.appendChild(option1);
-            year2.appendChild(option2);
+            year.appendChild(option1);
         }
 
         selectedState1CountyList = [];
@@ -283,95 +281,6 @@ d3.csv('data/aqiData.csv')
             }
         });
 
-        year1.addEventListener('change', (event) => {
-            selectedCounty1DescriptionData = [];
-            selectedCounty1PollutantData = [];
-            this.selectedCounty1Data.forEach((item) => {
-                if (item['Year'] == event.target.value) {
-                    goodObject = {
-                        Name: 'Good',
-                        Days: item['Good Days'],
-                        TotalDays: item['Days with AQI']
-                    };
-                    selectedCounty1DescriptionData.push(goodObject);
-
-                    moderateObject = {
-                        Name: 'Moderate',
-                        Days: item['Moderate Days'],
-                        TotalDays: item['Days with AQI']
-                    };
-                    selectedCounty1DescriptionData.push(moderateObject);
-
-                    sensitiveObject = {
-                        Name: 'Sensitive',
-                        Days: item['Unhealthy for Sensitive Groups Days'],
-                        TotalDays: item['Days with AQI']
-                    };
-                    selectedCounty1DescriptionData.push(sensitiveObject);
-
-                    unhealthyObject = {
-                        Name: 'Unhealthy',
-                        Days: item['Unhealthy Days'],
-                        TotalDays: item['Days with AQI']
-                    };
-                    selectedCounty1DescriptionData.push(unhealthyObject);
-
-                    veryUnhealthyObject = {
-                        Name: 'Very Unhealthy',
-                        Days: item['Very Unhealthy Days'],
-                        TotalDays: item['Days with AQI']
-                    };
-                    selectedCounty1DescriptionData.push(veryUnhealthyObject);
-
-                    hazardousObject = {
-                        Name: 'Hazardous',
-                        Days: item['Hazardous Days'],
-                        TotalDays: item['Days with AQI']
-                    };
-                    selectedCounty1DescriptionData.push(hazardousObject);
-
-                    COObject = {
-                        Name: 'CO',
-                        Days: item['Days CO']
-                    };
-                    selectedCounty1PollutantData.push(COObject);
-
-                    NO2Object = {
-                        Name: 'NO2',
-                        Days: item['Days NO2']
-                    };
-                    selectedCounty1PollutantData.push(NO2Object);
-
-                    OzoneObject = {
-                        Name: 'Ozone',
-                        Days: item['Days Ozone']
-                    };
-                    selectedCounty1PollutantData.push(OzoneObject);
-
-                    SO2Object = {
-                        Name: 'SO2',
-                        Days: item['Days SO2']
-                    };
-                    selectedCounty1PollutantData.push(SO2Object);
-
-                    PM25Object = {
-                        Name: 'PM2.5',
-                        Days: item['Days PM2.5']
-                    };
-                    selectedCounty1PollutantData.push(PM25Object);
-
-                    PM10Object = {
-                        Name: 'PM10',
-                        Days: item['Days PM10']
-                    };
-                    selectedCounty1PollutantData.push(PM10Object);
-                }
-            });
-
-            this.aqiDescription1.updateChart(selectedCounty1DescriptionData);
-            this.pollutant1.updateChart(selectedCounty1PollutantData);
-        });
-
         this.selectedCounty2Data;
         county2.addEventListener('change', (event) => {
             let selectedCounty2Data = [];
@@ -554,7 +463,91 @@ d3.csv('data/aqiData.csv')
             }
         });
 
-        year2.addEventListener('change', (event) => {
+        year.addEventListener('change', (event) => {
+            selectedCounty1DescriptionData = [];
+            selectedCounty1PollutantData = [];
+            this.selectedCounty1Data.forEach((item) => {
+                if (item['Year'] == event.target.value) {
+                    goodObject = {
+                        Name: 'Good',
+                        Days: item['Good Days'],
+                        TotalDays: item['Days with AQI']
+                    };
+                    selectedCounty1DescriptionData.push(goodObject);
+
+                    moderateObject = {
+                        Name: 'Moderate',
+                        Days: item['Moderate Days'],
+                        TotalDays: item['Days with AQI']
+                    };
+                    selectedCounty1DescriptionData.push(moderateObject);
+
+                    sensitiveObject = {
+                        Name: 'Sensitive',
+                        Days: item['Unhealthy for Sensitive Groups Days'],
+                        TotalDays: item['Days with AQI']
+                    };
+                    selectedCounty1DescriptionData.push(sensitiveObject);
+
+                    unhealthyObject = {
+                        Name: 'Unhealthy',
+                        Days: item['Unhealthy Days'],
+                        TotalDays: item['Days with AQI']
+                    };
+                    selectedCounty1DescriptionData.push(unhealthyObject);
+
+                    veryUnhealthyObject = {
+                        Name: 'Very Unhealthy',
+                        Days: item['Very Unhealthy Days'],
+                        TotalDays: item['Days with AQI']
+                    };
+                    selectedCounty1DescriptionData.push(veryUnhealthyObject);
+
+                    hazardousObject = {
+                        Name: 'Hazardous',
+                        Days: item['Hazardous Days'],
+                        TotalDays: item['Days with AQI']
+                    };
+                    selectedCounty1DescriptionData.push(hazardousObject);
+
+                    COObject = {
+                        Name: 'CO',
+                        Days: item['Days CO']
+                    };
+                    selectedCounty1PollutantData.push(COObject);
+
+                    NO2Object = {
+                        Name: 'NO2',
+                        Days: item['Days NO2']
+                    };
+                    selectedCounty1PollutantData.push(NO2Object);
+
+                    OzoneObject = {
+                        Name: 'Ozone',
+                        Days: item['Days Ozone']
+                    };
+                    selectedCounty1PollutantData.push(OzoneObject);
+
+                    SO2Object = {
+                        Name: 'SO2',
+                        Days: item['Days SO2']
+                    };
+                    selectedCounty1PollutantData.push(SO2Object);
+
+                    PM25Object = {
+                        Name: 'PM2.5',
+                        Days: item['Days PM2.5']
+                    };
+                    selectedCounty1PollutantData.push(PM25Object);
+
+                    PM10Object = {
+                        Name: 'PM10',
+                        Days: item['Days PM10']
+                    };
+                    selectedCounty1PollutantData.push(PM10Object);
+                }
+            });
+
             let selectedCounty2DescriptionData = [];
             let selectedCounty2PollutantData = [];
             this.selectedCounty2Data.forEach((item) => {
@@ -638,6 +631,9 @@ d3.csv('data/aqiData.csv')
                     selectedCounty2PollutantData.push(PM10Object);
                 }
             });
+
+            this.aqiDescription1.updateChart(selectedCounty1DescriptionData);
+            this.pollutant1.updateChart(selectedCounty1PollutantData);
 
             this.aqiDescription2.updateChart(selectedCounty2DescriptionData);
             this.pollutant2.updateChart(selectedCounty2PollutantData);

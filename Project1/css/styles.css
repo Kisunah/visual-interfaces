@@ -120,3 +120,8 @@ body {
 .trackingArea:hover {
     cursor: pointer;
 }
+
+.yearContainer {
+    display: flex;
+    justify-content: center;
+}
