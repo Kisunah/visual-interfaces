@@ -139,7 +139,7 @@ d3.csv('data/aqiData.csv')
             if (document.getElementById('noMeasurementChart1').children.length == 0) {
                 while (selectedCounty1Data.length < 42) {
                     selectedCounty1Data.sort((a, b) => {
-                        return a.Year - b.Year
+                        return a.Year - b.Year;
                     });
 
                     let length = selectedCounty1Data.length;
@@ -162,7 +162,7 @@ d3.csv('data/aqiData.csv')
                             County: event.target.value,
                             Year: `${lastYear + 1}`,
                             'Days with AQI': '0'
-                        })
+                        });
                     }
                 }
 
@@ -276,7 +276,7 @@ d3.csv('data/aqiData.csv')
                     item.Days = `${0}`;
                 }
             });
-            
+
             this.aqiDescription1;
             if (document.getElementById('aqiDescription1').children.length == 0) {
                 this.aqiDescription1 = new AqiDescription({
