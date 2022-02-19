@@ -50,7 +50,7 @@ d3.csv('data/aqiData.csv')
 
         // Populate the year select elements
         let year = document.getElementById('year');
-        for (let i = 2021; i > 1980; i--) {
+        for (let i = 2021; i >= 1980; i--) {
             let option1 = document.createElement('option');
             option1.value = i;
             option1.innerHTML = i;
