@@ -128,5 +128,16 @@ class NoMeasurementChart {
             .transition().duration(2000)
             .attr('height', d => vis.height - vis.yScale(vis.isLeapYear(parseInt(d['Year'])) - d['Days with AQI']))
             .attr('y', d => vis.yScale(vis.isLeapYear(parseInt(d['Year'])) - parseInt(d['Days with AQI'])))
+            .attr('fill', (d) => {
+                if (vis.isLeapYear(parseInt(d['Year'])) - d['Days with AQI'] < 100) {
+                    return 'lightblue';
+                } else if (vis.isLeapYear(parseInt(d['Year'])) - d['Days with AQI'] < 200) {
+                    return 'blue';
+                } else if (vis.isLeapYear(parseInt(d['Year'])) - d['Days with AQI'] < 300) {
+                    return '#11143d';
+                } else {
+                    return 'black';
+                }
+            });
     }
 }
