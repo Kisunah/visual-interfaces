@@ -67,7 +67,7 @@ class CharacterEpisodeCountChart {
             .attr('y', d => vis.yScale(d.count))
             .attr('pointer-events', 'all')
             .attr('transform', `translate(${vis.config.margin.left}, ${vis.config.margin.top})`)
-            .attr('fill', 'blue')
+            .attr('fill', '#5f00f8')
             .attr('height', d => vis.height - vis.yScale(d.count))
             .on('mouseover', function (event, d) {
                 d3.select(this)
@@ -98,6 +98,10 @@ class CharacterEpisodeCountChart {
                     .style('left', 0)
                     .style('top', 0)
                     .style('opacity', 0);
+            })
+            .on('click', function(event, d) {
+                const customEvent = new CustomEvent('updateEpisodeTimeline', { detail: d.character} );
+                document.dispatchEvent(customEvent);
             });
 
         vis.xAxisG.call(vis.xAxis)

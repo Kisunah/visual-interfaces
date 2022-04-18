@@ -67,7 +67,28 @@ class EpisodeTimeline {
             .attr('y', d => vis.yScale(d.count))
             .attr('pointer-events', 'all')
             .attr('transform', `translate(${vis.config.margin.left}, ${vis.config.margin.top})`)
-            .attr('fill', 'green')
+            .attr('fill', function (d) {
+                let season = d.episode.split('E')[0];
+
+                switch (season) {
+                    case 'S1':
+                        return '#4cfd3a';
+                    case 'S2':
+                        return '#00ee7d';
+                    case 'S3':
+                        return '#00dbbf';
+                    case 'S4':
+                        return '#00c5fd';
+                    case 'S5':
+                        return '#00adff';
+                    case 'S6':
+                        return '#0090ff';
+                    case 'S7':
+                        return '#0068ff';
+                    case 'S8':
+                        return '#001df8';
+                }
+            })
             .attr('height', d => vis.height - vis.yScale(d.count))
             .on('mouseover', function (event, d) {
                 d3.select(this)
@@ -110,7 +131,16 @@ class EpisodeTimeline {
     }
 
     updateChart(newData) {
+        let vis = this;
+
+        vis.yScale.domain([0, d3.max(vis.data, d => d.count)]);
+        vis.yAxisG.call(vis.yAxis);
+
         vis.svg.selectAll('rect')
             .data(newData)
+            .transition()
+            .duration(1000)
+            .attr('y', d => vis.yScale(d.count))
+            .attr('height', d => vis.height - vis.yScale(d.count));
     }
 }
