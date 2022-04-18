@@ -10,33 +10,43 @@
 </head>
 
 <body>
-    <svg id="characterLineCountChart"></svg>
-    <div id="characterLineCountTooltip" class="tooltip"></div>
-    <svg id="characterEpisodeCountChart"></svg>
-    <div id="characterEpisodeCountTooltip" class="tooltip"></div>
-    <svg id="specificEpisodeChart"></svg>
-    <select id="episodeSelect">
-        <option value="">Select an Episode</option>
-    </select>
-    <div id="specificEpisodeTooltip"></div>
-    <svg id="episodeTimeline"></svg>
-    <div id="episodeTimelineTooltip" class="tooltip"></div>
-    <select id="characterSelect">
-        <option value="HOUSE">HOUSE</option>
-        <option value="WILSON">WILSON</option>
-        <option value="CAMERON">CAMERON</option>
-        <option value="CHASE">CHASE</option>
-        <option value="FOREMAN">FOREMAN</option>
-        <option value="CUDDY">CUDDY</option>
-        <option value="KUTNER">KUTNER</option>
-        <option value="TAUB">TAUB</option>
-        <option value="THIRTEEN">THIRTEEN</option>
-        <option value="MASTERS">MASTERS</option>
-        <option value="ADAMS">ADAMS</option>
-        <option value="PARK">PARK</option>
-        <option value="STACY">STACY</option>
-        <option value="AMBER">AMBER</option>
-    </select>
+    <main>
+        <div class="chartOne">
+            <svg id="characterLineCountChart"></svg>
+            <div id="characterLineCountTooltip" class="tooltip"></div>
+        </div>
+        <div class="chartTwo">
+            <svg id="characterEpisodeCountChart"></svg>
+            <div id="characterEpisodeCountTooltip" class="tooltip"></div>
+        </div>
+        <div class="chartThree">
+            <svg id="specificEpisodeChart"></svg>
+            <select id="episodeSelect">
+                <option value="">Select an Episode</option>
+            </select>
+            <div id="specificEpisodeTooltip"></div>
+        </div>
+        <div class="timelineContainer">
+            <svg id="episodeTimeline"></svg>
+            <div id="episodeTimelineTooltip" class="tooltip"></div>
+            <select id="characterSelect">
+                <option value="HOUSE">HOUSE</option>
+                <option value="WILSON">WILSON</option>
+                <option value="CAMERON">CAMERON</option>
+                <option value="CHASE">CHASE</option>
+                <option value="FOREMAN">FOREMAN</option>
+                <option value="CUDDY">CUDDY</option>
+                <option value="KUTNER">KUTNER</option>
+                <option value="TAUB">TAUB</option>
+                <option value="THIRTEEN">THIRTEEN</option>
+                <option value="MASTERS">MASTERS</option>
+                <option value="ADAMS">ADAMS</option>
+                <option value="PARK">PARK</option>
+                <option value="STACY">STACY</option>
+                <option value="AMBER">AMBER</option>
+            </select>
+        </div>
+    </main>
 
     <script src="js/d3.v6.min.js"></script>
     <script src="js/main.js"></script>

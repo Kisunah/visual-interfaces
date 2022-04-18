@@ -214,7 +214,7 @@ function prepareTimeline(timelineData) {
         8: {},
     };
 
-    for (let i = 6; i < 17; i++) {
+    for (let i = 6; i <= 22; i++) {
         timelineData[1][i] = 0;
     }
 

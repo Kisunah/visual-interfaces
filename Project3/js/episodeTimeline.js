@@ -136,7 +136,7 @@ class EpisodeTimeline {
 
         vis.xAxisG.call(vis.xAxis)
             .selectAll('text')
-            .attr('transform', 'rotate(-45)')
+            .style('transform', 'rotate(-90deg) translate(-6px, -13px)')
             .style('text-anchor', 'end')
             .style('font-weight', 'bold');
 

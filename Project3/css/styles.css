@@ -18,3 +18,38 @@
 .selected {
     fill: #f85f00;
 }
+
+main {
+    width: 90%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1f 1fr 1fr;
+}
+
+.chartOne {
+    grid-column: 1/2;
+}
+
+.chartTwo {
+    grid-column: 2/3;
+}
+
+.chartThree {
+    grid-column: 3/4;
+    display: flex;
+    align-items: center;
+}
+
+.chartThree select {
+    height: 50px;
+}
+
+.timelineContainer {
+    grid-column: 1/4;
+    display: flex;
+    align-items: center;
+}
+
+.timelineContainer select {
+    height: 50px;
+}
