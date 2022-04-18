@@ -4,15 +4,34 @@ d3.csv('data/showData.csv')
 
         let data = _data;
 
+        let characterSelect = document.getElementById('characterSelect');
+        characterSelect.addEventListener('change', (event) => {
+            const customEvent = new CustomEvent('updateEpisodeTimeline', { detail: event.target.value });
+            document.dispatchEvent(customEvent);
+        });
+
+        let episodeSelect = document.getElementById('episodeSelect');
+        episodeSelect.addEventListener('change', (event) => {
+            const customEvent = new CustomEvent('selectEpisode', { detail: event.target.value });
+            document.dispatchEvent(customEvent);
+        })
+
         let mainCharacterList = ['HOUSE', 'WILSON', 'CAMERON', 'CHASE', 'FOREMAN', 'CUDDY', 'KUTNER', 'TAUB', 'THIRTEEN', 'MASTERS', 'ADAMS', 'PARK', 'STACY', 'AMBER']; // Characters with > 250 lines of dialogue
-
-
 
         let characterLineData = {};
         let episodeData = {};
         let timelineData = {};
         timelineData = prepareTimeline(timelineData);
 
+        for(let season in timelineData) {
+            for (let episode in timelineData[season]) {
+                let option = document.createElement('option');
+                option.value = `S${season}E${episode}`;
+                option.innerHTML = `S${season}E${episode}`;
+
+                episodeSelect.appendChild(option);
+            }
+        }
 
         data.forEach((item) => {
             let season = parseInt(item.Season);
@@ -95,6 +114,7 @@ d3.csv('data/showData.csv')
 
         document.addEventListener('updateEpisodeTimeline', (event) => {
             let character = event.detail;
+            characterSelect.value = character;
 
             let newTimelineData = {};
             newTimelineData = prepareTimeline(newTimelineData);
@@ -129,6 +149,53 @@ d3.csv('data/showData.csv')
             }
 
             episodeTimeline.updateChart(newPerEpisodeLineCountData);
+        });
+
+        let specificEpisodeData = [];
+
+        mainCharacterList.forEach((character) => {
+            let obj = {
+                character: character,
+                count: 0
+            };
+            specificEpisodeData.push(obj);
+        });
+
+        let specificEpisodeChart = new SpecificEpisodeChart({ parentElement: '#specificEpisodeChart' }, specificEpisodeData);
+
+        document.addEventListener('selectEpisode', (event) => {
+            episodeSelect.value = event.detail;
+
+            let season = parseInt(event.detail.split('E')[0].split('S')[1]);
+            let episode = parseInt(event.detail.split('E')[1]);
+
+            let newSpecificEpisodeData = [];
+            let specificEpisodeLineCount = {};
+
+            data.forEach((item) => {
+                let itemSeason = parseInt(item.Season);
+                let itemEpisode = parseInt(item.Episode);
+
+                if (season == itemSeason && episode == itemEpisode) {
+                    if (mainCharacterList.indexOf(item.Character) != -1) {
+                        if (specificEpisodeLineCount[item.Character] == undefined) {
+                            specificEpisodeLineCount[item.Character] = 1;
+                        } else {
+                            specificEpisodeLineCount[item.Character] += 1;
+                        }
+                    }
+                }
+            });
+
+            mainCharacterList.forEach((character) => {
+                let obj = {
+                    character: character
+                };
+                if (specificEpisodeLineCount[character] == undefined) obj['count'] = 0;
+                else obj['count'] = specificEpisodeLineCount[character];
+                newSpecificEpisodeData.push(obj);
+            })
+            specificEpisodeChart.updateChart(newSpecificEpisodeData);
         });
     });
 

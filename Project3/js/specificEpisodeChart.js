@@ -1,9 +1,9 @@
-class EpisodeTimeline {
+class SpecificEpisodeChart {
     constructor(_config, _data) {
         this.config = {
             parentElement: _config.parentElement,
-            containerWidth: _config.containerWidth || 2000,
-            containerHeight: _config.containerHeight || 500,
+            containerWidth: _config.containerWidth || 500,
+            containerHeight: _config.containerHeight || 350,
             margin: { top: 50, right: 50, bottom: 50, left: 50 }
         }
 
@@ -50,8 +50,8 @@ class EpisodeTimeline {
     updateVis() {
         let vis = this;
 
-        vis.xScale.domain(vis.data.map(d => d.episode));
-        vis.yScale.domain([0, d3.max(vis.data, d => d.count)]);
+        vis.xScale.domain(vis.data.map(d => d.character));
+        vis.yScale.domain([0, 250]);
 
         vis.renderVis();
     }
@@ -59,45 +59,15 @@ class EpisodeTimeline {
     renderVis() {
         let vis = this;
 
-        document.addEventListener('selectEpisode', (event) => {
-            let selected = d3.selectAll('.selected')._groups[0][0];
-            selected?.classList.toggle('selected');
-            if (event.detail != '') {
-                d3.select(`#${event.detail}`).classed("selected", d3.select(`#${event.detail}`).classed("selected") ? false : true);
-            }
-        });
-
         const bar = vis.svg.selectAll('rect')
             .data(vis.data)
             .join('rect')
             .attr('width', vis.xScale.bandwidth())
-            .attr('x', d => vis.xScale(d.episode))
+            .attr('x', d => vis.xScale(d.character))
             .attr('y', d => vis.yScale(d.count))
             .attr('pointer-events', 'all')
             .attr('transform', `translate(${vis.config.margin.left}, ${vis.config.margin.top})`)
-            .attr('id', d => d.episode)
-            .attr('fill', function (d) {
-                let season = d.episode.split('E')[0];
-
-                switch (season) {
-                    case 'S1':
-                        return '#4cfd3a';
-                    case 'S2':
-                        return '#00ee7d';
-                    case 'S3':
-                        return '#00dbbf';
-                    case 'S4':
-                        return '#00c5fd';
-                    case 'S5':
-                        return '#00adff';
-                    case 'S6':
-                        return '#0090ff';
-                    case 'S7':
-                        return '#0068ff';
-                    case 'S8':
-                        return '#001df8';
-                }
-            })
+            .attr('fill', '#f80099')
             .attr('height', d => vis.height - vis.yScale(d.count))
             .on('mouseover', function (event, d) {
                 d3.select(this)
@@ -107,13 +77,13 @@ class EpisodeTimeline {
                     .attr('stroke-width', 2)
                     .style('cursor', 'pointer');
 
-                d3.select('#episodeTimelineTooltip')
+                d3.select('#characterEpisodeCountTooltip')
                     .style('opacity', 1)
                     .style('z-index', 10000)
-                    .html(`<div class="tooltip-label">Episode: ${d.episode}<br>Count: ${d.count}</div>`);
+                    .html(`<div class="tooltip-label">Character: ${d.character}<br>Count: ${d.count}</div>`);
             })
             .on('mousemove', function (event) {
-                d3.select('#episodeTimelineTooltip')
+                d3.select('#characterEpisodeCountTooltip')
                     .style('left', (event.pageX + 10) + 'px')
                     .style('top', (event.pageY + 10) + 'px');
             })
@@ -124,14 +94,10 @@ class EpisodeTimeline {
                     .attr('stroke-width', 0)
                     .style('cursor', 'default');
 
-                d3.select('#episodeTimelineTooltip')
+                d3.select('#characterEpisodeCountTooltip')
                     .style('left', 0)
                     .style('top', 0)
                     .style('opacity', 0);
-            })
-            .on('click', function (event, d) {
-                const customEvent = new CustomEvent('selectEpisode', { detail: d.episode });
-                document.dispatchEvent(customEvent);
             });
 
         vis.xAxisG.call(vis.xAxis)
@@ -145,9 +111,6 @@ class EpisodeTimeline {
 
     updateChart(newData) {
         let vis = this;
-
-        vis.yScale.domain([0, d3.max(vis.data, d => d.count)]);
-        vis.yAxisG.call(vis.yAxis);
 
         vis.svg.selectAll('rect')
             .data(newData)
