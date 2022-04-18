@@ -4,14 +4,12 @@
     background: #ffffff;
     box-shadow: 2px 2px 3px 0px rgb(92 92 92 / 0.5);
     border: 1px solid #dddddd;
-    font-size: 12px;
-    font-weight: 600;
     padding: 2px 8px;
 }
 
 .tooltip-label {
-    font-weight: 500px;
-    font-size: 10px;
+    font-weight: 600;
+    font-size: 14px;
     color: #888888;
 }
 
@@ -23,7 +21,8 @@ main {
     width: 90%;
     margin: 0 auto;
     display: grid;
-    grid-template-columns: 1f 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    background-color: #cecece;
 }
 
 .chartOne {
@@ -45,11 +44,26 @@ main {
 }
 
 .timelineContainer {
-    grid-column: 1/4;
+    grid-column: 1/5;
     display: flex;
     align-items: center;
 }
 
 .timelineContainer select {
     height: 50px;
+}
+
+.image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image img {
+    border: 2px solid black;
+}
+
+.imageContainer {
+    width: 200px;
+    height: 200px;
 }

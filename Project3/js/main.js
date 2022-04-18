@@ -116,6 +116,10 @@ d3.csv('data/showData.csv')
             let character = event.detail;
             characterSelect.value = character;
 
+            let png = ['ADAMS', 'AMBER', 'FOREMAN', 'HOUSE', 'PARK'];
+            if (png.indexOf(character) != -1) document.getElementById('characterImage').setAttribute('src', `images/${character}.png`);
+            else document.getElementById('characterImage').setAttribute('src', `images/${character}.jpg`);
+
             let newTimelineData = {};
             newTimelineData = prepareTimeline(newTimelineData);
 
