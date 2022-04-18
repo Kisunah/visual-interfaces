@@ -1,9 +1,9 @@
-class EpisodeTimeline {
+class CharacterEpisodeCountChart {
     constructor(_config, _data) {
         this.config = {
             parentElement: _config.parentElement,
-            containerWidth: _config.containerWidth || 2000,
-            containerHeight: _config.containerHeight || 500,
+            containerWidth: _config.containerWidth || 500,
+            containerHeight: _config.containerHeight || 350,
             margin: { top: 50, right: 50, bottom: 50, left: 50 }
         }
 
@@ -50,7 +50,7 @@ class EpisodeTimeline {
     updateVis() {
         let vis = this;
 
-        vis.xScale.domain(vis.data.map(d => d.episode));
+        vis.xScale.domain(vis.data.map(d => d.character));
         vis.yScale.domain([0, d3.max(vis.data, d => d.count)]);
 
         vis.renderVis();
@@ -63,11 +63,11 @@ class EpisodeTimeline {
             .data(vis.data)
             .join('rect')
             .attr('width', vis.xScale.bandwidth())
-            .attr('x', d => vis.xScale(d.episode))
+            .attr('x', d => vis.xScale(d.character))
             .attr('y', d => vis.yScale(d.count))
             .attr('pointer-events', 'all')
             .attr('transform', `translate(${vis.config.margin.left}, ${vis.config.margin.top})`)
-            .attr('fill', 'green')
+            .attr('fill', 'blue')
             .attr('height', d => vis.height - vis.yScale(d.count))
             .on('mouseover', function (event, d) {
                 d3.select(this)
@@ -77,13 +77,13 @@ class EpisodeTimeline {
                     .attr('stroke-width', 2)
                     .style('cursor', 'pointer');
 
-                d3.select('#episodeTimelineTooltip')
+                d3.select('#characterEpisodeCountTooltip')
                     .style('opacity', 1)
                     .style('z-index', 10000)
-                    .html(`<div class="tooltip-label">Episode: ${d.episode}<br>Count: ${d.count}</div>`);
+                    .html(`<div class="tooltip-label">Character: ${d.character}<br>Count: ${d.count}</div>`);
             })
             .on('mousemove', function (event) {
-                d3.select('#episodeTimelineTooltip')
+                d3.select('#characterEpisodeCountTooltip')
                     .style('left', (event.pageX + 10) + 'px')
                     .style('top', (event.pageY + 10) + 'px');
             })
@@ -94,7 +94,7 @@ class EpisodeTimeline {
                     .attr('stroke-width', 0)
                     .style('cursor', 'default');
 
-                d3.select('#episodeTimelineTooltip')
+                d3.select('#characterEpisodeCountTooltip')
                     .style('left', 0)
                     .style('top', 0)
                     .style('opacity', 0);
@@ -107,10 +107,5 @@ class EpisodeTimeline {
             .style('font-weight', 'bold');
 
         vis.yAxisG.call(vis.yAxis);
-    }
-
-    updateChart(newData) {
-        vis.svg.selectAll('rect')
-            .data(newData)
     }
 }
