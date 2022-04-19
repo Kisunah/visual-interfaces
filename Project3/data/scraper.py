@@ -45,13 +45,29 @@ for url in urls:
 						character = character.split('[')[0].strip()
 					if character == 'GREG HOUSE':
 						character = 'HOUSE'
+					if character == 'JAMES WILSON':
+						character = 'WILSON'
+					if character == 'ROBERT CHASE':
+						character = 'CHASE'
+					if character == 'ERIC FOREMAN':
+						character = 'FOREMAN'
+					if character == 'LAWRENCE KUTNER':
+						character = 'KUTNER'
+					if character == 'CHRIS TAUB':
+						character = 'TAUB'
+					if character == 'AMBER VOLAKIS':
+						character = 'AMBER'
+					if character == 'LISA CUDDY':
+						character = 'CUDDY'
+					if character == '"THIRTEEN"':
+						character = 'THIRTEEN'
 					line = textSplit[1].strip().lower().replace('<br>', '')
 					rows.append([character, line, seasonNumber, episodeNumber])
 	else:
 		print('Failed to retrieve ' + url)
 
-# os.chdir('C:/workdir/visual-interfaces/Project3/data') # Desktop
-os.chdir('C:/Users/sethc/Desktop/visual-interfaces/Project3/data') # Laptop
+os.chdir('C:/workdir/visual-interfaces/Project3/data') # Desktop
+# os.chdir('C:/Users/sethc/Desktop/visual-interfaces/Project3/data') # Laptop
 
 with open('showData.csv', 'w', newline='', encoding='utf-8-sig') as writeFile:
     writer = csv.writer(writeFile)
