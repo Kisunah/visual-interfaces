@@ -44,6 +44,16 @@ class CharacterEpisodeCountChart {
         vis.yAxisG = vis.chart.append('g')
             .attr('class', 'axis y-axis');
 
+        vis.yAxisG.append('text')
+            .text('Number of Episodes')
+            .style('transform', 'translate(-50px, 150px) rotate(90deg)')
+
+        vis.svg.append('text')
+            .text('Number of Episodes Each Character Appears In')
+            .style('transform', 'translate(0px, 30px)')
+            .style('font-weight', 'bold')
+            .style('font-size', '150%');
+
         vis.updateVis();
     }
 
@@ -80,7 +90,7 @@ class CharacterEpisodeCountChart {
                 d3.select('#characterEpisodeCountTooltip')
                     .style('opacity', 1)
                     .style('z-index', 10000)
-                    .html(`<div class="tooltip-label">Character: ${d.character}<br>Count: ${d.count}</div>`);
+                    .html(`<div class="tooltip-label">Character: ${d.character}<br>Episodes: ${d.count}</div>`);
             })
             .on('mousemove', function (event) {
                 d3.select('#characterEpisodeCountTooltip')

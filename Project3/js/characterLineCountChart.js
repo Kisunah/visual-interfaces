@@ -44,6 +44,12 @@ class CharacterLineCountChart {
         vis.yAxisG = vis.chart.append('g')
             .attr('class', 'axis y-axis');
 
+        vis.svg.append('text')
+            .text('Number of Lines Per Character')
+            .style('transform', 'translate(75px, 30px)')
+            .style('font-weight', 'bold')
+            .style('font-size', '150%');
+
         vis.updateVis();
     }
 
@@ -80,7 +86,7 @@ class CharacterLineCountChart {
                 d3.select('#characterLineCountTooltip')
                     .style('opacity', 1)
                     .style('z-index', 10000)
-                    .html(`<div class="tooltip-label">Character: ${d.character}<br>Count: ${d.count}</div>`);
+                    .html(`<div class="tooltip-label">Character: ${d.character}<br>Lines: ${d.count}</div>`);
             })
             .on('mousemove', function (event) {
                 d3.select('#characterLineCountTooltip')

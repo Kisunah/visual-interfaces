@@ -44,6 +44,12 @@ class EpisodeTimeline {
         vis.yAxisG = vis.chart.append('g')
             .attr('class', 'axis y-axis');
 
+        vis.svg.append('text')
+            .text('Number of Lines for a Specific Character for Each Episode')
+            .style('transform', 'translate(650px, 30px)')
+            .style('font-weight', 'bold')
+            .style('font-size', '150%');
+
         vis.updateVis();
     }
 
@@ -110,7 +116,7 @@ class EpisodeTimeline {
                 d3.select('#episodeTimelineTooltip')
                     .style('opacity', 1)
                     .style('z-index', 10000)
-                    .html(`<div class="tooltip-label">Episode: ${d.episode}<br>Count: ${d.count}</div>`);
+                    .html(`<div class="tooltip-label">Episode: ${d.episode}<br>Lines: ${d.count}</div>`);
             })
             .on('mousemove', function (event) {
                 d3.select('#episodeTimelineTooltip')

@@ -44,6 +44,12 @@ class SpecificEpisodeChart {
         vis.yAxisG = vis.chart.append('g')
             .attr('class', 'axis y-axis');
 
+        vis.svg.append('text')
+            .text('Number of Lines Per Character Per Episode')
+            .style('transform', 'translate(0, 30px)')
+            .style('font-weight', 'bold')
+            .style('font-size', '150%');
+
         vis.updateVis();
     }
 
@@ -74,13 +80,12 @@ class SpecificEpisodeChart {
                     .transition()
                     .duration(150)
                     .attr('stroke', 'black')
-                    .attr('stroke-width', 2)
-                    .style('cursor', 'pointer');
+                    .attr('stroke-width', 2);
 
                 d3.select('#characterEpisodeCountTooltip')
                     .style('opacity', 1)
                     .style('z-index', 10000)
-                    .html(`<div class="tooltip-label">Character: ${d.character}<br>Count: ${d.count}</div>`);
+                    .html(`<div class="tooltip-label">Character: ${d.character}<br>Lines: ${d.count}</div>`);
             })
             .on('mousemove', function (event) {
                 d3.select('#characterEpisodeCountTooltip')
