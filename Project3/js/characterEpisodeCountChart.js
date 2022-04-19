@@ -100,7 +100,7 @@ class CharacterEpisodeCountChart {
                     .style('opacity', 0);
             })
             .on('click', function(event, d) {
-                const customEvent = new CustomEvent('updateEpisodeTimeline', { detail: d.character} );
+                const customEvent = new CustomEvent('selectCharacter', { detail: d.character} );
                 document.dispatchEvent(customEvent);
             });
 

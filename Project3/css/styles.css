@@ -67,3 +67,9 @@ main {
     width: 200px;
     height: 200px;
 }
+
+#wordCloudContainer {
+    grid-column: 1/5;
+    width: 100%;
+    height: 850px;
+}

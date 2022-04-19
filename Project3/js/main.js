@@ -6,7 +6,7 @@ d3.csv('data/showData.csv')
 
         let characterSelect = document.getElementById('characterSelect');
         characterSelect.addEventListener('change', (event) => {
-            const customEvent = new CustomEvent('updateEpisodeTimeline', { detail: event.target.value });
+            const customEvent = new CustomEvent('selectCharacter', { detail: event.target.value });
             document.dispatchEvent(customEvent);
         });
 
@@ -23,7 +23,7 @@ d3.csv('data/showData.csv')
         let timelineData = {};
         timelineData = prepareTimeline(timelineData);
 
-        for(let season in timelineData) {
+        for (let season in timelineData) {
             for (let episode in timelineData[season]) {
                 let option = document.createElement('option');
                 option.value = `S${season}E${episode}`;
@@ -112,7 +112,7 @@ d3.csv('data/showData.csv')
 
         let episodeTimeline = new EpisodeTimeline({ parentElement: '#episodeTimeline' }, perEpisodeLineCountData);
 
-        document.addEventListener('updateEpisodeTimeline', (event) => {
+        document.addEventListener('selectCharacter', (event) => {
             let character = event.detail;
             characterSelect.value = character;
 
@@ -237,9 +237,55 @@ function prepareTimeline(timelineData) {
         timelineData[8][i] = 0;
     }
 
-    for (let i = 1; i <= 23; i++) {
+    for (let i = 1; i <= 22; i++) {
         if (i != 18) timelineData[7][i] = 0;
     }
 
     return timelineData;
+}
+
+d3.csv('data/cleanedShowData.csv')
+    .then(_data => {
+        let data = _data;
+
+        let wordData = getWordList(data, 'HOUSE');
+        let wordCloud = new WordCloud(wordData[0], wordData[1], 'HOUSE');
+
+        document.addEventListener('selectCharacter', (event) => {
+            d3.select('#wordCloud').remove();
+            let character = event.detail;
+            let newWordData = getWordList(data, character);
+            new WordCloud(newWordData[0], newWordData[1], character);
+        });
+    });
+
+function getWordList(data, character) {
+    let limit = 100;
+    if (character != 'HOUSE') limit = 25;
+
+    let words = [];
+    data.forEach((item) => {
+        if (item.Character == character) {
+            let wordList = item.Line.split(' ');
+            words = words.concat(wordList);
+        }
+    });
+
+    let wordMap = {};
+    words.forEach((word) => {
+        if (wordMap[word] == undefined) {
+            wordMap[word] = 1;
+        } else {
+            wordMap[word] += 1;
+        }
+    });
+
+    let filteredWords = [];
+    for (let word in wordMap) {
+        if (wordMap[word] > limit) {
+            filteredWords.push(word);
+        }
+    }
+
+    return [filteredWords, wordMap];
 }
